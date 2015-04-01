@@ -37,6 +37,7 @@ k_8 = k_6 * 10000 #Tyson; >>k_9
 k_9 = k_6 * 100 #Tyson; >>k_6
 b_cyc = 1 #dummy
 b_kin = 1 #dummy
+b_e7 = 1 #dummy
 
 #Functions to be called from the derivative functions.
 def E6(t):
@@ -86,9 +87,9 @@ def func(y,t):
             #MDM2: translation - degradation - MPF degradation
             beta_m * y[1] - alpha_M * y[2] - alpha_mm * y[7] * y[2],
             #p21: Um, lots of things.
-            beta_p21 + beta_pp*y[3]*y[0]/(y[0]+kappa_p) - alpha_p21*y[3] - alpha_ep21*E7(t)*y[3]
+            beta_p21 + beta_pp*y[3]*y[0]/(y[0]+kappa_p) - alpha_p21*y[3] - alpha_ep21*E7(t)*y[3],
             #Rb: synth - degrad - cyclin
-            beta_rb - alpha_rb*y[4] - alpha_crb*y[8]*y[4]
+            beta_rb - alpha_rb*y[4] - alpha_crb*y[8]*y[4]*y[4]/(y[4]+b_e7*E7(t)),
             #CDK1: MPF-driven synth - complexing with cyclin
             k_6*y[7] - k_3*y[5]*y[8]*y[8]/(y[8]+b_cyc*y[3]),
             #pMPF: complex formation - phosphorylation + hydrolysis - degradation
