@@ -3,6 +3,15 @@ from numpy import arange
 import time
 import datetime
 import os
+import sys
+
+infile = ""
+
+if len(sys.argv) > 1:
+    infile = sys.argv[1]
+    if not os.path.isfile(infile):
+        sys.stderr.write(infile + ": No such file found.\n")
+        sys.exit(1)
 
 #Constants.  Do not add constants directly to the derivative function; violators
 #will have rabid weasels set upon them.
@@ -38,6 +47,13 @@ k_9 = k_6 * 100 #Tyson; >>k_6
 b_cyc = 1 #dummy
 b_kin = 1 #dummy
 b_e7 = 1 #dummy
+
+#Potentially override parameters
+if infile != "":
+    reader = open(infile)
+    for line in reader.readlines():
+        print line
+        exec(line)
 
 #Functions to be called from the derivative functions.
 def E6(t):
