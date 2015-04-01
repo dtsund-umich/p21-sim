@@ -48,6 +48,9 @@ b_cyc = 1 #dummy
 b_kin = 1 #dummy
 b_e7 = 1 #dummy
 
+#Dummy initial conditions
+y0 = [0,0,0,0,0,0,0,0,0]
+
 #Potentially override parameters
 if infile != "":
     reader = open(infile)
@@ -89,9 +92,6 @@ names.append("MPF")
 names.append("Cyclin")
 #names.append("Cyclin-p21")
 #names.append("E7-Rb")
-
-#Dummy initial conditions
-y0 = [0,0,0,0,0,0,0,0,0]
 
 #The derivative function for the differential equation system.
 def func(y,t):
