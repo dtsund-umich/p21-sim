@@ -35,6 +35,8 @@ beta_cyc = 0.015 #Tyson, maybe misinterpreted
 k_2 = 0 #Tyson
 k_8 = k_6 * 10000 #Tyson; >>k_9
 k_9 = k_6 * 100 #Tyson; >>k_6
+b_cyc = 1 #dummy
+b_kin = 1 #dummy
 
 #Functions to be called from the derivative functions.
 def E6(t):
@@ -88,11 +90,11 @@ def func(y,t):
             #Rb: synth - degrad - cyclin
             beta_rb - alpha_rb*y[4] - alpha_crb*y[8]*y[4]
             #CDK1: MPF-driven synth - complexing with cyclin
-            k_6*y[7] - k_3*y[5]*y[8],
+            k_6*y[7] - k_3*y[5]*y[8]*y[8]/(y[8]+b_cyc*y[3]),
             #pMPF: complex formation - phosphorylation + hydrolysis - degradation
-            k_3*y[5]*y[8] - y[6]*fM(y) + k_5*y[7] - k_7*y[3]*y[6],
+            k_3*y[5]*y[8]*y[8]/(y[8]+b_cyc*y[3]) - y[6]*y[6]*fM(y)/(y[6]+b_kin*y[3]) + k_5*y[7] - k_7*y[3]*y[6],
             #MPF: phosphorylation - dissociation - hydrolysis
-            y[6]*fM(y) - k_6*y[7] - k_5*y[7],
+            y[6]*y[6]*fM(y)/(y[6]+b_kin*y[3]) - k_6*y[7] - k_5*y[7],
             #Cyclin: synth - breakdown - complexing with CDK
             beta_cyc - k_2*y[8] - k_3*y[5]*y[8],
            ]
