@@ -68,7 +68,7 @@ b_kin = 1 #DUMMY with no physical basis XXX
 b_e7 = 1 #DUMMY with no physical basis XXX
 
 #Dummy initial conditions
-y0 = [0,0,0,0,0,0,0,0,0]
+y0 = [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]
 
 #Potentially override parameters
 if infile != "":
@@ -138,7 +138,7 @@ t = arange(0, 10.0, 0.01)
 
 y = odeint(func, y0, t, ixpr=True)
 
-if dirname = "":
+if dirname == "":
     dirname = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d-%H:%M:%S')
 os.makedirs(dirname)
 os.chdir(dirname)
