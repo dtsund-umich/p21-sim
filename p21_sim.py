@@ -6,6 +6,7 @@ import os
 import sys
 
 infile = ""
+dirname = ""
 
 if len(sys.argv) > 1:
     infile = sys.argv[1]
@@ -116,8 +117,8 @@ t = arange(0, 10.0, 0.01)
 
 y = odeint(func, y0, t, ixpr=True)
 
-
-dirname = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d-%H:%M:%S')
+if dirname = "":
+    dirname = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d-%H:%M:%S')
 os.makedirs(dirname)
 os.chdir(dirname)
 
