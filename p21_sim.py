@@ -45,7 +45,7 @@ def E7(t):
 
 def fM(y):
     #The 0.0001 in the denominator is to ensure we never divide by 0
-    return 0.018+10*y[8]**2/(y[5]+y[6]+y[7]+y[8]+0.0001)**2 #Tyson, adjustable
+    return 0.018+10*y[7]**2/(y[5]+y[6]+y[7]+0.0001)**2 #Tyson, adjustable
 
 #Variable key
 #y[0] = p53_active
@@ -55,11 +55,8 @@ def fM(y):
 #y[4] = Rb
 #y[5] = CDK1
 #y[6] = pMPF
-#y[7] = pMPF-p21
-#y[8] = MPF
-#y[9] = Cyclin
-#y[10] = Cyclin-p21
-#y[11] = E7-rb
+#y[7] = MPF
+#y[8] = Cyclin
 names = []
 names.append("p53")
 names.append("mdm2")
@@ -68,14 +65,14 @@ names.append("p21")
 names.append("Rb")
 names.append("CDK1")
 names.append("pMPF")
-names.append("pMPF-p21")
+#names.append("pMPF-p21")
 names.append("MPF")
 names.append("Cyclin")
-names.append("Cyclin-p21")
-names.append("E7-Rb")
+#names.append("Cyclin-p21")
+#names.append("E7-Rb")
 
 #Dummy initial conditions
-y0 = [0,0,0,0,0,0,0,0,0,0,0,0]
+y0 = [0,0,0,0,0,0,0,0,0]
 
 #The derivative function for the differential equation system.
 def func(y,t):
@@ -85,25 +82,19 @@ def func(y,t):
             #mdm2: p53 transcription + Rb transcription - degradation
             beta_mm * y[0] + beta_mi * kappa_rb / (kappa_rb + y[4]) - alpha_m * y[1],
             #MDM2: translation - degradation - MPF degradation
-            beta_m * y[1] - alpha_M * y[2] - alpha_mm * y[8] * y[2],
+            beta_m * y[1] - alpha_M * y[2] - alpha_mm * y[7] * y[2],
             #p21: Um, lots of things.
-            beta_p21 + beta_pp*y[3]*y[0]/(y[0]+kappa_p) - alpha_p21*y[3] - alpha_ep21*E7(t)*y[3] - k_7*y[3]*y[6] - k_8*y[3]*y[9] + k_10*y[7] + k_9*y[10],
-            #Rb: synth - degrad - cyclin - E7 sequestration + E7 unsequestration
-            beta_rb - alpha_rb*y[4] - alpha_crb*y[9]*y[4] - k_a*E7(t)*y[4] + k_d*y[11],
+            beta_p21 + beta_pp*y[3]*y[0]/(y[0]+kappa_p) - alpha_p21*y[3] - alpha_ep21*E7(t)*y[3]
+            #Rb: synth - degrad - cyclin
+            beta_rb - alpha_rb*y[4] - alpha_crb*y[8]*y[4]
             #CDK1: MPF-driven synth - complexing with cyclin
-            k_6*y[8] - k_3*y[5]*y[9],
-            #pMPF: complex formation - phosphorylation + hydrolysis - p21 sequestr. + p21 unsequestr.
-            k_3*y[5]*y[9] - y[6]*fM(y) + k_5*y[8] - k_7*y[3]*y[6] + k_10*y[7],
-            #pMPF-p21: sequestration - unsequestration
-            k_7*y[3]*y[6] - k_10*y[7],
+            k_6*y[7] - k_3*y[5]*y[8],
+            #pMPF: complex formation - phosphorylation + hydrolysis - degradation
+            k_3*y[5]*y[8] - y[6]*fM(y) + k_5*y[7] - k_7*y[3]*y[6],
             #MPF: phosphorylation - dissociation - hydrolysis
-            y[6]*fM(y) - k_6*y[8] - k_5*y[8],
-            #Cyclin: synth - breakdown - p21 sequestration + Cyc-p21 dissociation + p21 unsequestr.
-            beta_cyc - k_2*y[9] - k_3*y[5]*y[9] - k_8*y[3]*y[9] + k_9*y[10] + k_6*y[8],
-            #Cyclin-p21: sequestration - unsequestration
-            k_8*y[3]*y[9] - k_9*y[10],
-            #E7-Rb: sequestration - unsequestration
-            k_a*E7(t)*y[4] - k_d*y[11]
+            y[6]*fM(y) - k_6*y[7] - k_5*y[7],
+            #Cyclin: synth - breakdown - complexing with CDK
+            beta_cyc - k_2*y[8] - k_3*y[5]*y[8],
            ]
 
 t = arange(0, 10.0, 0.01)
