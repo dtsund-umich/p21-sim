@@ -63,8 +63,9 @@ def E7(t):
     return 0 #dummy
 
 def fM(y):
-    #The 0.0001 in the denominator is to ensure we never divide by 0
-    return 0.018+10*y[7]**2/(y[5]+y[6]+y[7]+0.0001)**2 #Tyson, adjustable
+    if y[7] == 0:
+        return 0.018
+    return 0.018+10*y[7]**2/(y[5]+y[6]+y[7])**2 #Tyson, adjustable
 
 #Variable key
 #y[0] = p53_active
