@@ -15,35 +15,35 @@ if len(sys.argv) > 1:
 
 #Constants.  Do not add constants directly to the derivative function; violators
 #will have rabid weasels set upon them.
-beta_vp = 1 #dummy
-alpha_mpa = 1 #dummy
-alpha_epa = 1 #dummy
-beta_mm = 1 #dummy
-beta_mi = 1 #dummy
-kappa_rb = 1 #dummy
-alpha_m = 1 #dummy
-beta_m = 1 #dummy
-alpha_M = 1 #dummy
-alpha_mm = 1 #dummy
-beta_p21 = 1 #dummy
-beta_pp = 1 #dummy
-kappa_p = 1 #dummy
-alpha_p21 = 1 #dummy
-alpha_ep21 = 1 #dummy
-beta_rb = 1 #dummy
-alpha_rb = 1 #dummy
-alpha_crb = 1 #dummy
-k_a = 1 #dummy
-k_d = 1 #dummy
+beta_vp = 1 #DUMMY with no physical basis XXX
+alpha_mpa = 1.4 #Kim-Jackson
+alpha_epa = 0.14 #DUMMY; Kim-Jackson alpha_ipa, which is obviously different
+beta_mm = 9.425 #Kim-Jackson
+beta_mi = 0.08 #Kim-Jackson
+kappa_rb = 1 #DUMMY with no physical basis XXX
+alpha_m = 0.583 #Kim-Jackson
+beta_m = 0.9 #Kim-Jackson
+alpha_M = 1 #Kim-Jackson
+alpha_mm = 0.5 #DUMMY; Kim-Jackson alpha_sm, which isn't the same
+beta_p21 = 3 #DUMMY with no physical basis XXX
+beta_pp = 1 #DUMMY with no physical basis XXX
+kappa_p = 1 #DUMMY with no physical basis XXX
+alpha_p21 = 1 #DUMMY with no physical basis XXX
+alpha_ep21 = 1 #DUMMY with no physical basis XXX
+beta_rb = 0.7 #DUMMY with no physical basis XXX
+alpha_rb = 1 #DUMMY with no physical basis XXX
+alpha_crb = 1 #DUMMY with no physical basis XXX
+k_a = 1 #DUMMY with no physical basis XXX
+k_d = 1 #DUMMY with no physical basis XXX
 k_6 = 0.1 #Tyson, adjustable 0.1-10
 k_3 = 200 #Tyson, maybe misinterpreted
 k_5 = 0 #Tyson
-k_7 = 1 #dummy
+k_7 = 1 #DUMMY with no physical basis XXX
 beta_cyc = 0.015 #Tyson, maybe misinterpreted
 k_2 = 0 #Tyson
-b_cyc = 1 #dummy
-b_kin = 1 #dummy
-b_e7 = 1 #dummy
+b_cyc = 1 #DUMMY with no physical basis XXX
+b_kin = 1 #DUMMY with no physical basis XXX
+b_e7 = 1 #DUMMY with no physical basis XXX
 
 #Dummy initial conditions
 y0 = [0,0,0,0,0,0,0,0,0]
@@ -85,11 +85,9 @@ names.append("p21")
 names.append("Rb")
 names.append("CDK1")
 names.append("pMPF")
-#names.append("pMPF-p21")
 names.append("MPF")
 names.append("Cyclin")
-#names.append("Cyclin-p21")
-#names.append("E7-Rb")
+
 
 #The derivative function for the differential equation system.
 def func(y,t):
