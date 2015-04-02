@@ -74,7 +74,6 @@ y0 = [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]
 if infile != "":
     reader = open(infile)
     for line in reader.readlines():
-        print line
         exec(line)
 
 #Functions to be called from the derivative functions.
