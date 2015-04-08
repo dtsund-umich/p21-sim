@@ -124,11 +124,11 @@ def func(y,t):
             #Rb: synth - degrad - cyclin
             beta_rb - alpha_rb*y[4] - alpha_crb*y[8]*y[4]**2/(y[4]+b_e7*E7(t)),
             #CDK1: MPF-driven synth - complexing with cyclin
-            k_6*y[7] - k_3*y[5]*y[8]**2/(y[8]+b_cyc*y[3]),
+            k_6*y[7] - k_3*y[5]*y[8],
             #pMPF: complex formation - phosphorylation + hydrolysis - degradation
-            k_3*y[5]*y[8]**2/(y[8]+b_cyc*y[3]) - y[6]**2*fM(y)/(y[6]+b_kin*y[3]) + k_5*y[7] - k_7*y[3]*y[6],
+            k_3*y[5]*y[8] - y[6]*fM(y) + k_5*y[7] - k_7*y[3]*y[6],
             #MPF: phosphorylation - dissociation - hydrolysis
-            y[6]**2*fM(y)/(y[6]+b_kin*y[3]) - k_6*y[7] - k_5*y[7],
+            y[6]*fM(y) - k_6*y[7] - k_5*y[7],
             #Cyclin: synth - breakdown - complexing with CDK
             beta_cyc - k_2*y[8] - k_3*y[5]*y[8],
            ]
