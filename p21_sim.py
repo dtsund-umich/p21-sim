@@ -63,8 +63,8 @@ k_5 = 0 #Tyson
 k_7 = 1 #DUMMY with no physical basis XXX
 beta_cyc = 0.015 #Tyson, maybe misinterpreted
 k_2 = 0 #Tyson
-b_cyc = 1 #DUMMY with no physical basis XXX
-b_kin = 1 #DUMMY with no physical basis XXX
+b_cyc = 1 #DUMMY (unused) with no physical basis XXX
+b_kin = 1 #DUMMY (unused) with no physical basis XXX
 b_e7 = 1 #DUMMY with no physical basis XXX
 
 #Dummy initial conditions
