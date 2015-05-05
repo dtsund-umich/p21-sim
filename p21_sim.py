@@ -68,7 +68,16 @@ b_kin = 1 #DUMMY (unused) with no physical basis XXX
 b_e7 = 1 #DUMMY with no physical basis XXX
 
 #Dummy initial conditions
-y0 = [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]
+#p53_active: Kim-Jackson
+#mdm2: Kim-Jackson
+#MDM2: Kim-Jackson
+#p21: XXX
+#Rb: XXX
+#CDK1: XXX
+#pMPF: XXX
+#MPF: XXX
+#Cyclin: XXX
+y0 = [0.077,1.065,2.336,0.1,0.1,0.1,0.1,0.1,0.1]
 
 #Potentially override parameters
 if infile != "":
