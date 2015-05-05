@@ -142,7 +142,7 @@ def func(y,t):
             beta_cyc - k_2*y[8] - k_3*y[5]*y[8],
            ]
 
-t = arange(0, 50.0, 0.01)
+t = arange(0, 200.0, 0.01)
 
 y = odeint(func, y0, t, ixpr=True)
 
