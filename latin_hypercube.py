@@ -28,11 +28,14 @@ for line in reader.readlines():
 
 
 i = 0
+metawriter  = open("run_" + outfile + ".sh", 'w')
 while len(nums[0]) > 0:
     outname = outfile + str(i) + ".txt"
     writer = open(outname, "w")
-    writer.write("dirname="+str(i)+"\n")
+    writer.write("dirname=\""+str(i)+"\"\n")
     for j in xrange(len(names)):
         writer.write(names[j] + "=" + str(nums[j].pop()) + "\n")
     writer.close()
     i += 1
+    metawriter.write("python p21_sim.py " + outname + "\n")
+metawriter.close()
