@@ -10,6 +10,7 @@ threshold = 0.5
 for d in directories:
     if d == "./.git":
         continue
+    os.chdir(d)
     for f in glob("*"):
         print f
         reader = open(f, 'r')
