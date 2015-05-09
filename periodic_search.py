@@ -21,6 +21,6 @@ for d in directories:
             data.append(float(line.split()[1].strip()))
         transformed = numpy.fft.rfft(data)
         #Exclude the first few terms to cut down on noise
-        if numpy.linalg.norm(numpy.real(transformed[4:]), numpy.inf) > threshold:
+        if numpy.linalg.norm(transformed[4:], numpy.inf) > threshold:
             print "Periodic behavior found in trial " + d
     os.chdir("..")
