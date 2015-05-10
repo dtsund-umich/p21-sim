@@ -5,7 +5,7 @@ from glob import glob
 import os
 
 directories = glob("*/")
-threshold = 0.5
+threshold = 0.01
 
 for d in directories:
     if d == "./.git":
@@ -20,7 +20,8 @@ for d in directories:
         for line in lines[halfway:]:
             data.append(float(line.split()[1].strip()))
         transformed = numpy.fft.rfft(data)
-        #Exclude the first few terms to cut down on noise
-        if numpy.linalg.norm(transformed[4:], numpy.inf) > threshold:
+        transformed /= (2*len(transformed))
+        #Exclude the first term, because that's just the mean and we expect it to be high anyway
+        if numpy.linalg.norm(transformed[1:], numpy.inf) > threshold:
             print "Periodic behavior found in trial " + d
     os.chdir("..")
