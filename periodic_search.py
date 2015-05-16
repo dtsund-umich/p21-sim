@@ -5,14 +5,14 @@ from glob import glob
 import os
 
 directories = glob("*/")
-threshold = 0.01
+threshold = 0.1
 
 for d in directories:
     if d == "./.git":
         continue
     os.chdir(d)
+    bad = False
     for f in glob("*"):
-        print f
         reader = open(f, 'r')
         lines = reader.readlines()
         halfway  = len(lines) / 2
@@ -23,5 +23,9 @@ for d in directories:
         transformed /= (2*len(transformed))
         #Exclude the first term, because that's just the mean and we expect it to be high anyway
         if numpy.linalg.norm(transformed[1:], numpy.inf) > threshold:
-            print "Periodic behavior found in trial " + d
+            print "Periodic/bad behavior found in trial " + d + ", file " + f
+            bad = True
+            break
+    if not bad:
+        print "Good behavior found in trial " + d
     os.chdir("..")
