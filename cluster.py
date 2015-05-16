@@ -11,4 +11,4 @@ for line in lines:
     tokens = line.strip().split()
     #Should be three tokens in each line.
     if float(tokens[2]) < threshold:
-        print tokens[0] + " " + tokens[1]
+        print tokens[0] + " threshold " + tokens[1]
