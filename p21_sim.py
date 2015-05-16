@@ -57,12 +57,12 @@ alpha_rb = 1 #DUMMY with no physical basis XXX
 alpha_crb = 1 #DUMMY with no physical basis XXX
 k_a = 1 #DUMMY with no physical basis XXX
 k_d = 1 #DUMMY with no physical basis XXX
-k_6 = 0.1 #Tyson, adjustable 0.1-10
-k_3 = 200 #Tyson, maybe misinterpreted
+k_6 = 6 #Tyson, adjustable 0.1-10
+k_3 = 12000 #Tyson, maybe misinterpreted
 k_5 = 0 #Tyson
 k_7 = 1 #DUMMY with no physical basis XXX
-beta_cyc = 0.015 #Tyson, maybe misinterpreted
-k_2 = 0 #Tyson
+beta_cyc = 0.9 #Tyson, maybe misinterpreted
+k_2 = 0.5 #DUMMY
 b_cyc = 1 #DUMMY (unused) with no physical basis XXX
 b_kin = 1 #DUMMY (unused) with no physical basis XXX
 b_e7 = 1 #DUMMY with no physical basis XXX
@@ -94,8 +94,8 @@ def E7(t):
 
 def fM(y):
     if y[7] == 0:
-        return 0.018
-    return 0.018+10*y[7]**2/(y[5]+y[6]+y[7])**2 #Tyson, adjustable
+        return 1.08
+    return 1.08+600*y[7]**2/(y[5]+y[6]+y[7])**2 #Tyson, adjustable
 
 #Variable key
 #y[0] = p53_active
