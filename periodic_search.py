@@ -17,6 +17,10 @@ for d in directories:
         lines = reader.readlines()
         halfway  = len(lines) / 2
         data = []
+        if lines[-1].split()[1].strip() == "nan":
+            print "Failure to converge found in trial " + d
+            bad = True
+            break
         for line in lines[halfway:]:
             data.append(float(line.split()[1].strip()))
         transformed = numpy.fft.rfft(data)
