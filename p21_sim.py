@@ -39,6 +39,7 @@ if len(sys.argv) > 1:
 #will have rabid weasels set upon them.
 beta_vp = 1 #DUMMY with no physical basis XXX
 alpha_mpa = 1.4 #Kim-Jackson
+alpha_p53 = 2 #Kim-Jackson alpha_pi, inactive p53 degradation rate
 alpha_epa = 0.14 #DUMMY; Kim-Jackson alpha_ipa, which is obviously different
 beta_mm = 9.425 #Kim-Jackson
 beta_mi = 0.08 #Kim-Jackson
@@ -57,7 +58,7 @@ alpha_rb = 1 #DUMMY with no physical basis XXX
 alpha_crb = 1 #DUMMY with no physical basis XXX
 k_a = 1 #DUMMY with no physical basis XXX
 k_d = 1 #DUMMY with no physical basis XXX
-k_6 = 6 #Tyson, adjustable 0.1-10
+k_6 = 30 #Tyson, adjustable 0.1-10
 k_3 = 12000 #Tyson, maybe misinterpreted
 k_5 = 0 #Tyson
 k_7 = 1 #DUMMY with no physical basis XXX
@@ -95,7 +96,7 @@ def E7(t):
 def fM(y):
     if y[7] == 0:
         return 1.08
-    return 1.08+600*y[7]**2/(y[5]+y[6]+y[7])**2 #Tyson, adjustable
+    return 1.08+6000*y[7]**2/(y[5]+y[6]+y[7])**2 #Tyson, adjustable
 
 #Variable key
 #y[0] = p53_active
@@ -122,8 +123,8 @@ names.append("Cyclin")
 #The derivative function for the differential equation system.
 def func(y,t):
     return [
-            #p53: synth - MDM2 degradation - E6 degradation
-            beta_vp - alpha_mpa * y[2] * y[0] - alpha_epa * E6(t) * y[0],
+            #p53: synth - MDM2 degradation - E6 degradation - regular degradation
+            beta_vp - alpha_mpa * y[2] * y[0] - alpha_epa * E6(t) * y[0] - alpha_p53 * y[0],
             #mdm2: p53 transcription + Rb transcription - degradation
             beta_mm * y[0] + beta_mi * kappa_rb / (kappa_rb + y[4]) - alpha_m * y[1],
             #MDM2: translation - degradation - MPF degradation
@@ -132,14 +133,14 @@ def func(y,t):
             beta_p21 + beta_pp*y[3]*y[0]/(y[0]+kappa_p) - alpha_p21*y[3] - alpha_ep21*E7(t)*y[3],
             #Rb: synth - degrad - cyclin
             beta_rb - alpha_rb*y[4] - alpha_crb*y[8]*y[4]**2/(y[4]+b_e7*E7(t)),
-            #CDK1: MPF-driven synth - complexing with cyclin
+            #CDK1: MPF breakdown - complexing with cyclin
             k_6*y[7] - k_3*y[5]*y[8],
             #pMPF: complex formation - phosphorylation + hydrolysis - degradation
             k_3*y[5]*y[8] - y[6]*fM(y) + k_5*y[7] - k_7*y[3]*y[6],
             #MPF: phosphorylation - dissociation - hydrolysis
             y[6]*fM(y) - k_6*y[7] - k_5*y[7],
-            #Cyclin: synth - breakdown - complexing with CDK
-            beta_cyc - k_2*y[8] - k_3*y[5]*y[8],
+            #Cyclin: synth - breakdown - complexing with CDK + MPF breakdown
+            beta_cyc - k_2*y[8] - k_3*y[5]*y[8] + k_6*y[7],
            ]
 
 t = arange(0, 5000.0, 0.01)
