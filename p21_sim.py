@@ -61,12 +61,14 @@ k_d = 1 #DUMMY with no physical basis XXX
 k_6 = 30 #Tyson, adjustable 0.1-10
 k_3 = 12000 #Tyson, maybe misinterpreted
 k_5 = 0 #Tyson
-k_7 = 1 #DUMMY with no physical basis XXX
-beta_cyc = 0.9 #Tyson, maybe misinterpreted
-k_2 = 1 #DUMMY with no physical basis XXX
+k_7 = 36 #Tyson
+beta_cyc = .9 #Tyson, maybe misinterpreted
+k_2 = 0 #Tyson
 b_cyc = 1 #DUMMY (unused) with no physical basis XXX
 b_kin = 1 #DUMMY (unused) with no physical basis XXX
 b_e7 = 1 #DUMMY with no physical basis XXX
+k_4p = 1.08 #Tyson
+k_4 = 6000 #Tyson
 
 #Dummy initial conditions
 #p53_active: Kim-Jackson
@@ -74,17 +76,21 @@ b_e7 = 1 #DUMMY with no physical basis XXX
 #MDM2: Kim-Jackson
 #p21: XXX
 #Rb: XXX
-#CDK1: XXX
+#CDK1: Tyson
 #pMPF: XXX
 #MPF: XXX
 #Cyclin: XXX
-y0 = [0.077,1.065,2.336,0.1,0.1,0.1,0.1,0.1,0.1]
+y0 = [0.077,1.065,2.336,0.1,0.1,0.01,0.1,0.1,0.1,0.1,0.1]
 
 #Potentially override parameters
 if infile != "":
     reader = open(infile)
     for line in reader.readlines():
         exec(line)
+
+
+k_9 = k_6 * 100 #Tyson
+k_8 = k_9 * 100 #Tyson
 
 #Functions to be called from the derivative functions.
 def E6(t):
@@ -95,8 +101,8 @@ def E7(t):
 
 def fM(y):
     if y[7] == 0:
-        return 1.08
-    return 1.08+6000*y[7]**2/(y[5]+y[6]+y[7])**2 #Tyson, adjustable
+        return k_4p
+    return k_4p+k_4*y[7]**2/(y[5]+y[6]+y[7]+y[9])**2 #Tyson, adjustable
 
 #Variable key
 #y[0] = p53_active
@@ -108,6 +114,8 @@ def fM(y):
 #y[6] = pMPF
 #y[7] = MPF
 #y[8] = Cyclin
+#y[9] = CDK1-P
+#y[10] = Cyclin-P
 names = []
 names.append("p53")
 names.append("mdm2")
@@ -118,6 +126,8 @@ names.append("CDK1")
 names.append("pMPF")
 names.append("MPF")
 names.append("Cyclin")
+names.append("CDK1-P")
+names.append("Cyclin-P")
 
 
 #The derivative function for the differential equation system.
@@ -133,17 +143,22 @@ def func(y,t):
             beta_p21 + beta_pp*y[3]*y[0]/(y[0]+kappa_p) - alpha_p21*y[3] - alpha_ep21*E7(t)*y[3],
             #Rb: synth - degrad - cyclin
             beta_rb - alpha_rb*y[4] - alpha_crb*y[8]*y[4]**2/(y[4]+b_e7*E7(t)),
-            #CDK1: MPF breakdown - complexing with cyclin
-            k_6*y[7] - k_3*y[5]*y[8],
-            #pMPF: complex formation - phosphorylation + hydrolysis - degradation
-            k_3*y[5]*y[8] - y[6]*fM(y) + k_5*y[7] - k_7*y[3]*y[6],
-            #MPF: phosphorylation - dissociation - hydrolysis
-            y[6]*fM(y) - k_6*y[7] - k_5*y[7],
-            #Cyclin: synth - breakdown - complexing with CDK + MPF breakdown
-            beta_cyc - k_2*y[8] - k_3*y[5]*y[8] + k_6*y[7],
+            #CDK1: MPF breakdown - phosphorylation + dephosphorylation
+            #For now, 0, as in Tyson
+            0,#k_6*y[7] - k_8*y[5] + k_9*y[9],
+            #pMPF: complex formation - phosphorylation + hydrolysis
+            k_3*y[9]*y[8] - y[6]*fM(y) + k_5*y[7],
+            #MPF: phosphorylation - hydrolysis - dissociation
+            y[6]*fM(y) - k_5*y[7] - k_6*y[7],
+            #Cyclin: synth - breakdown - complexing with CDK
+            beta_cyc - k_2*y[8] - k_3*y[9]*y[8],
+            #CDK1-P: phosphorylation - dephosphorylation - complexing with cyclin
+            k_8*y[5] - k_9*y[9] - k_3*y[9]*y[8],
+            #Cyclin-P: dissociation - breakdown
+            k_6*y[7] - k_7*y[10]
            ]
 
-t = arange(0, 5000.0, 0.01)
+t = arange(0, 50.0, 0.01)
 
 y = odeint(func, y0, t, ixpr=True)
 
