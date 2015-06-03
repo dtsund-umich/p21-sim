@@ -56,19 +56,39 @@ alpha_ep21 = 1 #DUMMY with no physical basis XXX
 beta_rb = 0.7 #DUMMY with no physical basis XXX
 alpha_rb = 1 #DUMMY with no physical basis XXX
 alpha_crb = 1 #DUMMY with no physical basis XXX
-k_a = 1 #DUMMY with no physical basis XXX
-k_d = 1 #DUMMY with no physical basis XXX
-k_6 = 30 #Tyson, adjustable 0.1-10
-k_3 = 12000 #Tyson, maybe misinterpreted
-k_5 = 0 #Tyson
-k_7 = 36 #Tyson
-beta_cyc = .9 #Tyson, maybe misinterpreted
-k_2 = 0 #Tyson
-b_cyc = 1 #DUMMY (unused) with no physical basis XXX
-b_kin = 1 #DUMMY (unused) with no physical basis XXX
 b_e7 = 1 #DUMMY with no physical basis XXX
-k_4p = 1.08 #Tyson
-k_4 = 6000 #Tyson
+k_e = 0.01 #DUMMY with no physical basis XXX
+k_a = 0.01 #DUMMY with no physical basis XXX
+k_b = 0.01 #DUMMY with no physical basis XXX
+
+
+#All of the following constants come directly from the Goldbeter paper.
+cdc20tot = 5
+e2ftot = 3
+gf = 0.1 #XXX This one is adjustable
+k_da = 0.1
+k_db = 0.005
+k_dd = 0.1
+k_de = 0.1
+k_gf = 0.1
+k_1cdc20 = 1
+k_2cdc20 = 1
+k_1e2f = 0.01
+k_2e2f = 0.01
+v_da = 0.245
+v_db = 0.28
+v_dd = 0.245
+v_de = 0.35
+v_sa = 0.175
+v_sb = 0.21
+v_sd = 0.175
+v_se = 0.21
+v_1cdc20 = 0.21
+v_2cdc20 = 0.35
+v_1e2f = 0.805
+v_2e2f = 0.7
+md = k_dd * v_sd * gf / (k_gf + gf) / (v_dd - (v_sd * gf / (k_gf + gf)))
+
 
 #Dummy initial conditions
 #p53_active: Kim-Jackson
@@ -76,11 +96,12 @@ k_4 = 6000 #Tyson
 #MDM2: Kim-Jackson
 #p21: XXX
 #Rb: XXX
-#CDK1: Tyson
-#pMPF: XXX
-#MPF: XXX
-#Cyclin: XXX
-y0 = [0.077,1.065,2.336,0.1,0.1,0.01,0.1,0.1,0.1,0.1,0.1]
+#E2F: Goldbeter
+#Me: Goldbeter
+#Ma: Goldbeter
+#Mb: Goldbeter
+#Cdc20: Goldbeter
+y0 = [0.077,1.065,2.336,0.1,0.1,0.01,0.01,0.01,1.1,0.01]
 
 #Potentially override parameters
 if infile != "":
@@ -89,9 +110,6 @@ if infile != "":
         exec(line)
 
 
-k_9 = k_6 * 100 #Tyson
-k_8 = k_9 * 100 #Tyson
-
 #Functions to be called from the derivative functions.
 def E6(t):
     return 0 #dummy
@@ -99,10 +117,6 @@ def E6(t):
 def E7(t):
     return 0 #dummy
 
-def fM(y):
-    if y[7] == 0:
-        return k_4p
-    return k_4p+k_4*y[7]**2/(y[5]+y[6]+y[7]+y[9])**2 #Tyson, adjustable
 
 #Variable key
 #y[0] = p53_active
@@ -122,12 +136,12 @@ names.append("mdm2")
 names.append("MDM2")
 names.append("p21")
 names.append("Rb")
-names.append("CDK1")
-names.append("pMPF")
-names.append("MPF")
-names.append("Cyclin")
-names.append("CDK1-P")
-names.append("Cyclin-P")
+names.append("E2F")
+names.append("Me")
+names.append("Ma")
+names.append("Mb")
+names.append("Cdc20")
+
 
 
 #The derivative function for the differential equation system.
@@ -143,22 +157,19 @@ def func(y,t):
             beta_p21 + beta_pp*y[3]*y[0]/(y[0]+kappa_p) - alpha_p21*y[3] - alpha_ep21*E7(t)*y[3],
             #Rb: synth - degrad - cyclin
             beta_rb - alpha_rb*y[4] - alpha_crb*y[8]*y[4]**2/(y[4]+b_e7*E7(t)),
-            #CDK1: MPF breakdown - phosphorylation + dephosphorylation
-            #For now, 0, as in Tyson
-            0,#k_6*y[7] - k_8*y[5] + k_9*y[9],
-            #pMPF: complex formation - phosphorylation + hydrolysis
-            k_3*y[9]*y[8] - y[6]*fM(y) + k_5*y[7],
-            #MPF: phosphorylation - hydrolysis - dissociation
-            y[6]*fM(y) - k_5*y[7] - k_6*y[7],
-            #Cyclin: synth - breakdown - complexing with CDK
-            beta_cyc - k_2*y[8] - k_3*y[9]*y[8],
-            #CDK1-P: phosphorylation - dephosphorylation - complexing with cyclin
-            k_8*y[5] - k_9*y[9] - k_3*y[9]*y[8],
-            #Cyclin-P: dissociation - breakdown
-            k_6*y[7] - k_7*y[10]
+            #Active E2F: activation - deactivation
+            v_1e2f * (e2ftot - y[5])/(k_1e2f + e2ftot - y[5]) * (md + y[6]) - v_2e2f * y[5]/(k_2e2f + y[5]) * y[7],
+            #Cyclin E/CDK2 complex: synth - degrad (CycA/CDK2) - degrad (p21)
+            v_se * y[5] - v_de * y[7] * y[6]/(k_de + y[6]) - k_e * y[3] * y[6],
+            #Cyclin A/CDK2 complex: synth - degrad (Cdc20) - degrad (p21)
+            v_sa * y[5] - v_da * y[9] * y[7]/(k_da + y[7]) - k_a * y[3] * y[7],
+            #Cyclin B/CDK1 complex: synth - degrad (Cdc20) - degrad (p21)
+            v_sb * y[7] - v_db * y[9] * y[8]/(k_db + y[8]) - k_b * y[3] * y[8],
+            #Active Cdc20: activation - deactivation
+            v_1cdc20 * y[8] * (cdc20tot - y[9])/(k_1cdc20 + cdc20tot - y[9]) - v_2cdc20 * y[9]/(k_2cdc20 + y[9])
            ]
 
-t = arange(0, 50.0, 0.01)
+t = arange(0, 500.0, 0.01)
 
 y = odeint(func, y0, t, ixpr=True)
 
