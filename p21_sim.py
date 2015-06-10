@@ -154,9 +154,9 @@ def func(y,t):
             #MDM2: translation - degradation - MPF degradation
             beta_m * y[1] - alpha_M * y[2] - alpha_mm * y[7] * y[2],
             #p21: Um, lots of things.
-            beta_p21 + beta_pp*y[3]*y[0]/(y[0]+kappa_p) - alpha_p21*y[3] - alpha_ep21*E7(t)*y[3],
+            beta_p21 + beta_pp*y[0]/(y[0]+kappa_p) - alpha_p21*y[3] - alpha_ep21*E7(t)*y[3],
             #Rb: synth - degrad - cyclin
-            beta_rb - alpha_rb*y[4] - alpha_crb*y[8]*y[4]**2/(y[4]+b_e7*E7(t)),
+            beta_rb - alpha_rb*y[4] - alpha_crb*y[6]*y[4]**2/(y[4]+b_e7*E7(t)),
             #Active E2F: activation - deactivation
             v_1e2f * (e2ftot - y[5])/(k_1e2f + e2ftot - y[5]) * (md + y[6]) - v_2e2f * y[5]/(k_2e2f + y[5]) * y[7],
             #Cyclin E/CDK2 complex: synth - degrad (CycA/CDK2) - degrad (p21)
