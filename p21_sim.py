@@ -91,6 +91,18 @@ v_1e2f = 0.805
 v_2e2f = 0.7
 md = k_dd * v_sd * gf / (k_gf + gf) / (v_dd - (v_sd * gf / (k_gf + gf)))
 
+#Knockdown mutation terms.  Set any of these to 0 to knock down the relevant
+#gene's activity.
+theta_mdm2 = 1
+theta_p53 = 1
+theta_rb = 1
+theta_ma = 1
+theta_me = 1
+theta_md = 1
+theta_e2f = 1
+theta_cdc20 = 1
+theta_mb = 1
+theta_p21 = 1
 
 #Dummy initial conditions
 #p53_active: Kim-Jackson
@@ -152,27 +164,27 @@ names.append("Cdc20")
 def func(y,t):
     return [
             #p53: synth - MDM2 degradation - E6 degradation - regular degradation
-            beta_vp - alpha_mpa * y[2] * y[0] - alpha_epa * E6(t) * y[0] - alpha_p53 * y[0],
+            beta_vp - theta_mdm2 * alpha_mpa * y[2] * y[0] - alpha_epa * E6(t) * y[0] - alpha_p53 * y[0],
             #mdm2: p53 transcription + Rb transcription - degradation
-            beta_mm * y[0] + beta_mi * kappa_rb / (kappa_rb + y[4]) - alpha_m * y[1],
+            theta_p53 * beta_mm * y[0] + beta_mi * kappa_rb / (kappa_rb + theta_rb * y[4]) - alpha_m * y[1],
             #MDM2: translation - degradation - MPF degradation
-            beta_m * y[1] - alpha_M * y[2] - alpha_mm * y[8] * y[2],
+            beta_m * y[1] - alpha_M * y[2] - theta_ma * alpha_mm * y[8] * y[2],
             #p21: Um, lots of things.
-            beta_p21 + beta_pp*y[0]/(y[0]+kappa_p) - alpha_p21*y[3] - alpha_ep21*(E7(t) - y[5])*y[3],
+            beta_p21 + theta_p53*beta_pp*y[0]/(y[0]+kappa_p) - alpha_p21*y[3] - alpha_ep21*(E7(t) - y[5])*y[3],
             #Rb: synth - degrad - cyclin - E7 association + E7 dissociation
-            beta_rb - alpha_rb*y[4] - alpha_crb*y[7]*y[4] - kappa_a * y[4] * (E7(t) - y[5]) + kappa_d * y[5],
+            beta_rb - alpha_rb*y[4] - theta_me*alpha_crb*y[7]*y[4] - kappa_a * y[4] * (E7(t) - y[5]) + kappa_d * y[5],
             #Rb-E7: association - dissociation
             kappa_a * y[4] * (E7(t) - y[5]) - kappa_d * y[5],
             #Active E2F: activation - deactivation
-            v_1e2f * (e2ftot - y[6])/(k_1e2f + e2ftot - y[6]) * (md + y[7]) - v_2e2f * y[6]/(k_2e2f + y[6]) * y[8],
+            v_1e2f * (e2ftot - y[6])/(k_1e2f + e2ftot - y[6]) * (theta_md*md + theta_me*y[7]) - v_2e2f * y[6]/(k_2e2f + y[6]) * theta_ma * y[8],
             #Cyclin E/CDK2 complex: synth - degrad (CycA/CDK2) - degrad (p21)
-            v_se * y[6] - v_de * y[8] * y[7]/(k_de + y[7]) - k_e * y[3] * y[7],
+            theta_e2f * v_se * y[6] - theta_ma * v_de * y[8] * y[7]/(k_de + y[7]) - theta_p21 * k_e * y[3] * y[7],
             #Cyclin A/CDK2 complex: synth - degrad (Cdc20) - degrad (p21)
-            v_sa * y[6] - v_da * y[10] * y[8]/(k_da + y[8]) - k_a * y[3] * y[8],
+            theta_e2f * v_sa * y[6] - theta_cdc20 v_da * y[10] * y[8]/(k_da + y[8]) - theta_p21 * k_a * y[3] * y[8],
             #Cyclin B/CDK1 complex: synth - degrad (Cdc20) - degrad (p21)
-            v_sb * y[8] - v_db * y[10] * y[9]/(k_db + y[9]) - k_b * y[3] * y[9],
+            theta_ma * v_sb * y[8] - theta_cdc20 * v_db * y[10] * y[9]/(k_db + y[9]) - theta_p21 *  k_b * y[3] * y[9],
             #Active Cdc20: activation - deactivation
-            v_1cdc20 * y[9] * (cdc20tot - y[10])/(k_1cdc20 + cdc20tot - y[10]) - v_2cdc20 * y[10]/(k_2cdc20 + y[10])
+            theta_mb * v_1cdc20 * y[9] * (cdc20tot - y[10])/(k_1cdc20 + cdc20tot - y[10]) - v_2cdc20 * y[10]/(k_2cdc20 + y[10])
            ]
 
 t = arange(0, 500.0, 0.01)
