@@ -26,11 +26,11 @@ import datetime
 import os
 import sys
 
-infile = ""
+infiles = []
 dirname = ""
 
 if len(sys.argv) > 1:
-    infile = sys.argv[1]
+    infiles = sys.argv[1:]
     if not os.path.isfile(infile):
         sys.stderr.write(infile + ": No such file found.\n")
         sys.exit(1)
@@ -107,7 +107,7 @@ md = k_dd * v_sd * gf / (k_gf + gf) / (v_dd - (v_sd * gf / (k_gf + gf)))
 y0 = [0.077,1.065,2.336,0.1,0.1,0,0.01,0.01,0.01,1.1,0.01]
 
 #Potentially override parameters
-if infile != "":
+for infile in infiles:
     reader = open(infile)
     for line in reader.readlines():
         exec(line)
