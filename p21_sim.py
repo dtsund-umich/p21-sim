@@ -180,7 +180,7 @@ def func(y,t):
             #Cyclin E/CDK2 complex: synth - degrad (CycA/CDK2) - degrad (p21)
             theta_e2f * v_se * y[6] - theta_ma * v_de * y[8] * y[7]/(k_de + y[7]) - theta_p21 * k_e * y[3] * y[7],
             #Cyclin A/CDK2 complex: synth - degrad (Cdc20) - degrad (p21)
-            theta_e2f * v_sa * y[6] - theta_cdc20 v_da * y[10] * y[8]/(k_da + y[8]) - theta_p21 * k_a * y[3] * y[8],
+            theta_e2f * v_sa * y[6] - theta_cdc20 * v_da * y[10] * y[8]/(k_da + y[8]) - theta_p21 * k_a * y[3] * y[8],
             #Cyclin B/CDK1 complex: synth - degrad (Cdc20) - degrad (p21)
             theta_ma * v_sb * y[8] - theta_cdc20 * v_db * y[10] * y[9]/(k_db + y[9]) - theta_p21 *  k_b * y[3] * y[9],
             #Active Cdc20: activation - deactivation
