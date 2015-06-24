@@ -31,9 +31,10 @@ dirname = ""
 
 if len(sys.argv) > 1:
     infiles = sys.argv[1:]
-    if not os.path.isfile(infile):
-        sys.stderr.write(infile + ": No such file found.\n")
-        sys.exit(1)
+    for infile in infiles:
+        if not os.path.isfile(infile):
+            sys.stderr.write(infile + ": No such file found.\n")
+            sys.exit(1)
 
 #Constants.  Do not add constants directly to the derivative function; violators
 #will have rabid weasels set upon them.
