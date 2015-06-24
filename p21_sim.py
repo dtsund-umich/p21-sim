@@ -63,6 +63,9 @@ k_e = 0.01 #DUMMY with no physical basis XXX
 k_a = 0.01 #DUMMY with no physical basis XXX
 k_b = 0.01 #DUMMY with no physical basis XXX
 
+beta_p16 = 1 #DUMMY with no physical basis XXX
+alpha_p16 = 1 #DUMMY with no physical basis XXX
+k_d = 1 #DUMMY with no physical basis XXX
 
 #All of the following constants come directly from the Goldbeter paper.
 cdc20tot = 5
@@ -89,7 +92,6 @@ v_1cdc20 = 0.21
 v_2cdc20 = 0.35
 v_1e2f = 0.805
 v_2e2f = 0.7
-md = k_dd * v_sd * gf / (k_gf + gf) / (v_dd - (v_sd * gf / (k_gf + gf)))
 
 #Knockdown mutation terms.  Set any of these to 0 to knock down the relevant
 #gene's activity.
@@ -103,6 +105,7 @@ theta_e2f = 1
 theta_cdc20 = 1
 theta_mb = 1
 theta_p21 = 1
+theta_p16 = 1
 
 #Dummy initial conditions
 #p53_active: Kim-Jackson
@@ -116,7 +119,9 @@ theta_p21 = 1
 #Ma: Goldbeter
 #Mb: Goldbeter
 #Cdc20: Goldbeter
-y0 = [0.077,1.065,2.336,0.1,0.1,0,0.01,0.01,0.01,1.1,0.01]
+#Md: XXX
+#p16: XXX
+y0 = [0.077,1.065,2.336,0.1,0.1,0,0.01,0.01,0.01,1.1,0.01,0.1,0.1]
 
 #Potentially override parameters
 for infile in infiles:
@@ -139,12 +144,14 @@ def E7(t):
 #y[2] = MDM2
 #y[3] = p21
 #y[4] = Rb
-#y[6] = CDK1
-#y[7] = pMPF
-#y[8] = MPF
-#y[9] = Cyclin
-#y[10] = CDK1-P
-#y[10] = Cyclin-P
+#y[5] = Rb-E7
+#y[6] = E2F
+#y[7] = Me
+#y[8] = Ma
+#y[9] = Mb
+#y[10] = Cdc20
+#y[11] = p16
+#y[12] = Md
 names = []
 names.append("p53")
 names.append("mdm2")
@@ -157,6 +164,8 @@ names.append("Me")
 names.append("Ma")
 names.append("Mb")
 names.append("Cdc20")
+names.append("p16")
+names.append("Md")
 
 
 
@@ -176,7 +185,7 @@ def func(y,t):
             #Rb-E7: association - dissociation
             kappa_a * y[4] * (E7(t) - y[5]) - kappa_d * y[5],
             #Active E2F: activation - deactivation
-            v_1e2f * (e2ftot - y[6])/(k_1e2f + e2ftot - y[6]) * (theta_md*md + theta_me*y[7]) - v_2e2f * y[6]/(k_2e2f + y[6]) * theta_ma * y[8],
+            v_1e2f * (e2ftot - y[6])/(k_1e2f + e2ftot - y[6]) * (theta_md*y[12] + theta_me*y[7]) - v_2e2f * y[6]/(k_2e2f + y[6]) * theta_ma * y[8],
             #Cyclin E/CDK2 complex: synth - degrad (CycA/CDK2) - degrad (p21)
             theta_e2f * v_se * y[6] - theta_ma * v_de * y[8] * y[7]/(k_de + y[7]) - theta_p21 * k_e * y[3] * y[7],
             #Cyclin A/CDK2 complex: synth - degrad (Cdc20) - degrad (p21)
@@ -184,10 +193,14 @@ def func(y,t):
             #Cyclin B/CDK1 complex: synth - degrad (Cdc20) - degrad (p21)
             theta_ma * v_sb * y[8] - theta_cdc20 * v_db * y[10] * y[9]/(k_db + y[9]) - theta_p21 *  k_b * y[3] * y[9],
             #Active Cdc20: activation - deactivation
-            theta_mb * v_1cdc20 * y[9] * (cdc20tot - y[10])/(k_1cdc20 + cdc20tot - y[10]) - v_2cdc20 * y[10]/(k_2cdc20 + y[10])
+            theta_mb * v_1cdc20 * y[9] * (cdc20tot - y[10])/(k_1cdc20 + cdc20tot - y[10]) - v_2cdc20 * y[10]/(k_2cdc20 + y[10]),
+            #p16: Synthesis - degradation
+            theta_e2f * beta_p16 * y[6] - alpha_p16 * y[11],
+            #Md: Synthesis - degradation (normal) - degradation (p16)
+            v_sd * gf / (k_gf + gf) - v_dd * y[12] / (k_dd + y[12]) - theta_p16 * k_d * y[11] * y[12]
            ]
 
-t = arange(0, 500.0, 0.01)
+t = arange(0, 2000.0, 0.01)
 
 y = odeint(func, y0, t, ixpr=True)
 
