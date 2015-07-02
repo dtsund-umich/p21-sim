@@ -41,7 +41,8 @@ for line in reader.readlines():
 
 
 i = 0
-metawriter  = open("run_" + outfile + ".sh", 'w')
+metawriter = open("run_" + outfile + ".sh", 'w')
+listwriter = open(outfile + "_list.txt", 'w')
 while len(nums[0]) > 0:
     outname = outfile + str(i) + ".txt"
     writer = open(outname, "w")
@@ -56,4 +57,5 @@ while len(nums[0]) > 0:
     writer.close()
     i += 1
     metawriter.write("python p21_sim.py " + outname + "\n")
+    listwriter.write(outname + "\n")
 metawriter.close()
