@@ -131,6 +131,13 @@ for infile in infiles:
         exec(line)
 
 
+#Abort early if the output directory already exists.
+if dirname != "":
+    if os.path.exists(dirname):
+        sys.stderr.write("Output dir " + dirname + " already exists.  Aborting.\n")
+        sys.exit(2)
+
+
 #Functions to be called from the derivative functions.
 def E6(t):
     return 0 #dummy
@@ -203,7 +210,7 @@ def func(y,t):
 
 t = arange(0, 2000.0, 0.01)
 
-y = odeint(func, y0, t, ixpr=True)
+y = odeint(func, y0, t, ixpr=False)
 
 if dirname == "":
     dirname = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d-%H:%M:%S')
