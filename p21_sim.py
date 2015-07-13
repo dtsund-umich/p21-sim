@@ -208,7 +208,7 @@ def func(y,t):
             v_sd * gf / (k_gf + gf) - v_dd * y[12] / (k_dd + y[12]) - theta_p16 * k_d * y[11] * y[12]
            ]
 
-t = arange(0, 2000.0, 0.01)
+t = arange(0, 2000.0, 0.1)
 
 y = odeint(func, y0, t, ixpr=False)
 
@@ -219,7 +219,7 @@ os.chdir(dirname)
 
 for i in range(len(y0)):
     writer = open(names[i]+".txt", 'w')
-    for j in xrange(len(t)):
+    for j in xrange((len(t) * 9) / 10, len(t)):
         writer.write(str(t[j]) + " " + str(y[j][i]) + "\n")
     writer.close()
 
