@@ -67,11 +67,12 @@ k_b = 0.01 #DUMMY with no physical basis XXX
 beta_p16 = 1 #DUMMY with no physical basis XXX
 alpha_p16 = 1 #DUMMY with no physical basis XXX
 k_d = 1 #DUMMY with no physical basis XXX
+kappa_e2f = 1 #DUMMY with no physical basis XXX
 
 #All of the following constants come directly from the Goldbeter paper.
 cdc20tot = 5
 e2ftot = 3
-gf = 0.1 #XXX This one is adjustable
+gf = 0.0 #XXX This one is adjustable
 k_da = 0.1
 k_db = 0.005
 k_dd = 0.1
@@ -195,15 +196,15 @@ def func(y,t):
             #Active E2F: activation - deactivation
             v_1e2f * (e2ftot - y[6])/(k_1e2f + e2ftot - y[6]) * (theta_md*y[12] + theta_me*y[7]) - v_2e2f * y[6]/(k_2e2f + y[6]) * theta_ma * y[8],
             #Cyclin E/CDK2 complex: synth - degrad (CycA/CDK2) - degrad (p21)
-            theta_e2f * v_se * y[6] - theta_ma * v_de * y[8] * y[7]/(k_de + y[7]) - theta_p21 * k_e * y[3] * y[7],
+            theta_e2f * v_se * (y[6]**2 / (y[6] + kappa_e2f * y[4])) - theta_ma * v_de * y[8] * y[7]/(k_de + y[7]) - theta_p21 * k_e * y[3] * y[7],
             #Cyclin A/CDK2 complex: synth - degrad (Cdc20) - degrad (p21)
-            theta_e2f * v_sa * y[6] - theta_cdc20 * v_da * y[10] * y[8]/(k_da + y[8]) - theta_p21 * k_a * y[3] * y[8],
+            theta_e2f * v_sa * (y[6]**2 / (y[6] + kappa_e2f * y[4])) - theta_cdc20 * v_da * y[10] * y[8]/(k_da + y[8]) - theta_p21 * k_a * y[3] * y[8],
             #Cyclin B/CDK1 complex: synth - degrad (Cdc20) - degrad (p21)
             theta_ma * v_sb * y[8] - theta_cdc20 * v_db * y[10] * y[9]/(k_db + y[9]) - theta_p21 *  k_b * y[3] * y[9],
             #Active Cdc20: activation - deactivation
             theta_mb * v_1cdc20 * y[9] * (cdc20tot - y[10])/(k_1cdc20 + cdc20tot - y[10]) - v_2cdc20 * y[10]/(k_2cdc20 + y[10]),
             #p16: Synthesis - degradation
-            theta_e2f * beta_p16 * y[6] - alpha_p16 * y[11],
+            theta_e2f * beta_p16 * (y[6]**2 / (y[6] + kappa_e2f * y[4])) - alpha_p16 * y[11],
             #Md: Synthesis - degradation (normal) - degradation (p16)
             v_sd * gf / (k_gf + gf) - v_dd * y[12] / (k_dd + y[12]) - theta_p16 * k_d * y[11] * y[12]
            ]
