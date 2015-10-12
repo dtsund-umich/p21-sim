@@ -43,7 +43,7 @@ from boolean2 import Model
 pygame.init()
 
 
-space_needed = len(netstrings) * 70 + 10
+space_needed = len(netstrings) * 70 + 20
 screen = pygame.display.set_mode((space_needed,850), DOUBLEBUF)
 
 while True:
@@ -55,7 +55,7 @@ while True:
     font = pygame.font.Font(None, 30)
     for i in xrange(len(names)):
         #Stagger the names, because some of them might be long
-        screen.blit(font.render(names[i], True, (0,0,0)), (10 + 70*i, 30 if i % 2 == 0 else 50))
+        screen.blit(font.render(names[i], True, (0,0,0)), (10 + 70*i, 20 if i % 2 == 0 else 45))
     
     step = 0
     for state in model.states:
