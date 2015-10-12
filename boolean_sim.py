@@ -31,6 +31,8 @@ if len(sys.argv) < 2:
     sys.exit()
 
 netstrings = open(sys.argv[1]).readlines()
+for i in xrange(len(netstrings)):
+    netstrings[i] = netstrings[i].strip()
 names = []
 initials = []
 for line in netstrings:
@@ -41,9 +43,16 @@ text = generate(netstrings, names, initials)
 from boolean2 import Model
 
 pygame.init()
+font = pygame.font.Font(None, 30)
 
-
-space_needed = len(netstrings) * 70 + 20
+#Determine how big the window should be.
+space_needed = len(netstrings) * 70 + 30
+update_objs = []
+longest = 0
+for line in netstrings:
+    length = font.size(line)[0]
+    longest = length if length > longest else longest
+space_needed += longest
 screen = pygame.display.set_mode((space_needed,850), DOUBLEBUF)
 
 while True:
@@ -51,12 +60,16 @@ while True:
     model.initialize()
     model.iterate(steps=10)
     
+    #Display the variable names along the top
     screen.fill((255,255,255))
-    font = pygame.font.Font(None, 30)
     for i in xrange(len(names)):
         #Stagger the names, because some of them might be long
         screen.blit(font.render(names[i], True, (0,0,0)), (10 + 70*i, 20 if i % 2 == 0 else 45))
     
+    #Display the update rules on the side
+    for i in xrange(len(netstrings)):
+        screen.blit(font.render(netstrings[i], True, (0,0,0)), (20 + 70 * len(netstrings), 70 + 25 * i))
+
     step = 0
     for state in model.states:
         cur_var = 0
