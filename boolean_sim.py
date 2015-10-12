@@ -1,35 +1,39 @@
 import boolean2
+import sys
+import string
 
 import pygame
 from pygame.locals import *
 #TODO: Add E6, E7 effects
-text = """
-p53 = True
-mdm2rna = True
-MDM2 = True
-p21 = True
-Rb = True
-E2F = True
-p16 = True
-Md = True
-Me = True
-Ma = True
-Mb = True
-Cdc20 = True
 
-p53* = not MDM2
-mdm2rna* = p53 or not Rb
-MDM2* = (mdm2rna or MDM2) and not Ma
-p21* = p53
-Rb* = not Me
-E2F* = (Md and Me and not Ma) or (E2F and not Ma) or (E2F and (Md or Me))
-p16* = E2F and not Rb
-Md* = not p16
-Me* = (E2F and not Rb) or (Me and not Ma and not p21)
-Ma* = (E2F and not Rb) or (Ma and not Cdc20 and not p21)
-Mb* = Ma or (Mb and not Cdc20 and not p21)
-Cdc20* = Mb 
-"""
+def generate(net_lines, name_lines, initial_values):
+    to_return = ""
+    for i in xrange(len(name_lines)):
+        to_return += name_lines[i] + " = " + str(initial_values[i]) + "\n"
+    to_return += "\n"
+    to_return += string.join(net_lines, "\n")
+    return to_return
+        
+
+if len(sys.argv) < 2:
+    print "Use: python boolean_sim.py networkfile.txt"
+    print "networkfile.txt will be a list of update rules in plain text form."
+    print "Example:"
+    print "p53* = not MDM2"
+    print "mdm2rna* = p53 or not Rb"
+    print "etc."
+    print "Be advised that variable names cannot differ in only casing!"
+    print ""
+    sys.exit()
+
+netstrings = open(sys.argv[1]).readlines()
+names = []
+initials = []
+for line in netstrings:
+    names.append(line.split("*")[0])
+    initials.append(True)
+text = generate(netstrings, names, initials)
+
 from boolean2 import Model
 
 model = boolean2.Model(text, mode='sync')
