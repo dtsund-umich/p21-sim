@@ -54,6 +54,7 @@ for line in netstrings:
     longest = length if length > longest else longest
 space_needed += longest
 screen = pygame.display.set_mode((space_needed,850), DOUBLEBUF)
+pygame.display.set_caption("BooleanNet basic graphical frontend")
 
 while True:
     model = boolean2.Model(text, mode='sync')
