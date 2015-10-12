@@ -68,6 +68,8 @@ while True:
     #See if the user clicked somewhere to update an initial condition
     update = False
     for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
         if event.type == MOUSEBUTTONDOWN:
             if event.button == 1:
                 if event.pos[0] > 10 and event.pos[0] < 10 + 70 * len(names):
