@@ -30,7 +30,7 @@ for d in directories:
                 if i > 0 and i < len(data) - 1:
                     if data[i] > data[i-1] and data[i] > data[i+1]:
                         maxima.append(i)
-            if max(data) > 0 and max(data)/min(data) > 1.2 and len(maxima) > 2:
+            if max(data) > 0.00000001 and max(data)/min(data) > 1.2 and len(maxima) > 2:
                 print "Periodic/bad behavior found in trial " + d + ", file " + f + ", period = " + str((maxima[1] - maxima[0]) * 0.01)
                 bad = True
                 break
