@@ -20,7 +20,7 @@ def generate(net_lines, name_lines, initial_values):
         
 
 if len(sys.argv) < 2:
-    print "Use: python boolean_sim.py networkfile.txt"
+    print "Use: python boolean_sim.py networkfile.txt [num_steps]"
     print "networkfile.txt will be a list of update rules in plain text form."
     print "Example:"
     print "p53* = not MDM2"
@@ -56,6 +56,11 @@ space_needed += longest
 screen = pygame.display.set_mode((space_needed,850), DOUBLEBUF)
 pygame.display.set_caption("BooleanNet basic graphical frontend")
 
+num_steps = 10
+if len(sys.argv) == 3:
+    num_steps = int(sys.argv[2])
+step_height = 700 / num_steps
+
 model = boolean2.Model(text, mode='sync')
 update = True
 
@@ -63,7 +68,7 @@ while True:
     if update:
         model = boolean2.Model(text, mode='sync')
         model.initialize()
-        model.iterate(steps=10)
+        model.iterate(steps=num_steps)
         update = False
     
         #Display the variable names along the top
@@ -80,7 +85,7 @@ while True:
         for state in model.states:
             cur_var = 0
             for name in names:
-                pygame.draw.rect(screen, (0,255,0) if getattr(state,name) else (255,0,0),(10+70*cur_var,70+step*70,70,70))
+                pygame.draw.rect(screen, (0,255,0) if getattr(state,name) else (255,0,0),(10+70*cur_var,70+step*step_height,70,step_height))
                 cur_var += 1
             step += 1
         pygame.display.flip()
