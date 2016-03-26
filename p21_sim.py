@@ -1,4 +1,4 @@
-# Copyright (c) 2015 Derrick Sund
+# Copyright (c) 2015-2016 Derrick Sund
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -38,92 +38,58 @@ if len(sys.argv) > 1:
 
 #Constants.  Do not add constants directly to the derivative function; violators
 #will have rabid weasels set upon them.
-beta_vp = 1 #DUMMY with no physical basis XXX
-alpha_mpa = 1.4 #Kim-Jackson
-alpha_p53 = 2 #Kim-Jackson alpha_pi, inactive p53 degradation rate
-alpha_epa = 0.14 #DUMMY; Kim-Jackson alpha_ipa, which is obviously different
-beta_mm = 9.425 #Kim-Jackson
-beta_mi = 0.08 #Kim-Jackson
-kappa_rb = 1 #DUMMY with no physical basis XXX
-alpha_m = 0.583 #Kim-Jackson
-beta_m = 0.9 #Kim-Jackson
-alpha_M = 1 #Kim-Jackson
-alpha_mm = 0.5 #DUMMY; Kim-Jackson alpha_sm, which isn't the same
-beta_p21 = 3 #DUMMY with no physical basis XXX
-beta_pp = 1 #DUMMY with no physical basis XXX
-kappa_p = 1 #DUMMY with no physical basis XXX
-alpha_p21 = 1 #DUMMY with no physical basis XXX
-alpha_ep21 = 1 #DUMMY with no physical basis XXX
-beta_rb = 0.7 #DUMMY with no physical basis XXX
-alpha_rb = 1 #DUMMY with no physical basis XXX
-alpha_crb = 1 #DUMMY with no physical basis XXX
-kappa_a = 1 #DUMMY with no physical basis XXX
-kappa_d = 1 #DUMMY with no physical basis XXX
-b_e7 = 1 #DUMMY with no physical basis XXX
-k_e = 0.01 #DUMMY with no physical basis XXX
-k_a = 0.01 #DUMMY with no physical basis XXX
-k_b = 0.01 #DUMMY with no physical basis XXX
+alpha_p14 = 1 #DUMMY
+alpha_Ink4 = 1 #DUMMY
+alpha_p21 = 1 #DUMMY
+alpha_p53 = 1 #DUMMY
+alpha_mdm2r = 1 #DUMMY
+alpha_MDM2 = 1 #DUMMY
+alpha_CD = 1 #DUMMY
+alpha_CE = 1 #DUMMY
+alpha_CB = 1 #DUMMY
 
-beta_p16 = 1 #DUMMY with no physical basis XXX
-alpha_p16 = 1 #DUMMY with no physical basis XXX
-k_d = 1 #DUMMY with no physical basis XXX
-kappa_e2f = 1 #DUMMY with no physical basis XXX
+omega_p14 = 1 #DUMMY
+omega_Ink4 = 1 #DUMMY
+omega_p21 = 1 #DUMMY
+omega_p21CE = 1 #DUMMY
+omega_p53 = 1 #DUMMY
+omega_p53MDM2 = 1 #DUMMY
+omega_mdm2r = 1 #DUMMY
+omega_MDM2 = 1 #DUMMY
+omega_CD = 1 #DUMMY
+omega_CDInk4 = 1 #DUMMY
+omega_CE = 1 #DUMMY
+omega_CA = 1 #DUMMY
+omega_CACDC20 = 1 #DUMMY
+omega_CB = 1 #DUMMY
+omega_CBCDC20 = 1 #DUMMY
 
-#All of the following constants come directly from the Goldbeter paper.
-cdc20tot = 5
-e2ftot = 3
-gf = 0.0 #XXX This one is adjustable
-k_da = 0.1
-k_db = 0.005
-k_dd = 0.1
-k_de = 0.1
-k_gf = 0.1
-k_1cdc20 = 1
-k_2cdc20 = 1
-k_1e2f = 0.01
-k_2e2f = 0.01
-v_da = 0.245
-v_db = 0.28
-v_dd = 0.245
-v_de = 0.35
-v_sa = 0.175
-v_sb = 0.21
-v_sd = 0.175
-v_se = 0.21
-v_1cdc20 = 0.21
-v_2cdc20 = 0.35
-v_1e2f = 0.805
-v_2e2f = 0.7
+beta_E2FRb = 1 #DUMMY
+beta_E2FRbMP = beta_E2FRb * 0.3 #DUMMY, but should be smaller than beta_E2FRb
+beta_mdm2p14 = 1 #DUMMY
+beta_cp21 = 1 #DUMMY
 
-#Knockdown mutation terms.  Set any of these to 0 to knock down the relevant
-#gene's activity.
-theta_mdm2 = 1
-theta_p53 = 1
-theta_rb = 1
-theta_ma = 1
-theta_me = 1
-theta_md = 1
-theta_e2f = 1
-theta_cdc20 = 1
-theta_mb = 1
-theta_p21 = 1
-theta_p16 = 1
+epsilon_p14p53 = 1 #DUMMY
+epsilon_Ink4p53 = 1 #DUMMY
+epsilon_RbCD = 1 #DUMMY
+epsilon_RbCE = 1 #DUMMY
+epsilon_E2F = 1 #DUMMY
+epsilon_CDC20 = 1 #DUMMY
+
+sigma_Rb = 1 #DUMMY
+sigma_RbMP = 1 #DUMMY
+sigma_E2F = 1 #DUMMY
+sigma_CDC20 = 1 #DUMMY
+
+kappa_CECA = 1 #DUMMY
+kappa_CBCA = 1 #DUMMY
+
+E2F_tot = 1 #DUMMY
+CDC20_tot = 1 #DUMMY
+
 
 #Dummy initial conditions
-#p53_active: Kim-Jackson
-#mdm2: Kim-Jackson
-#MDM2: Kim-Jackson
-#p21: XXX
-#Rb: XXX
-#Rb-E7: XXX, but starting at 0 makes a lot of sense
-#E2F: Goldbeter
-#Me: Goldbeter
-#Ma: Goldbeter
-#Mb: Goldbeter
-#Cdc20: Goldbeter
-#Md: XXX
-#p16: XXX
-y0 = [0.077,1.065,2.336,0.1,0.1,0,0.01,0.01,0.01,1.1,0.01,0.1,0.1]
+y0 = [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]
 
 #Potentially override parameters
 for infile in infiles:
@@ -146,67 +112,108 @@ def E6(t):
 def E7(t):
     return 0 #dummy
 
+#Fractions for inhibition/inactive complex formation.
+#Each has a sanity check in case chief input is near zero.
+sanity_threshold = 0.00001
+def f(e2f, rb, rbmp):
+    if e2f < sanity_threshold:
+        return 0
+    return e2f**2 / (e2f + beta_E2FRb * rb + beta_E2FRbMP * rbmp)
+
+def g(mdm2, p14):
+    if mdm2 < sanity_threshold:
+        return 0
+    return mdm2**2 / (mdm2 + beta_mdm2p14 * p14)
+
+def h(c, p21, cd, ce, ca, cb):
+    if c < sanity_threshold:
+        return 0
+    return c**2 / (c + beta_cp21 * p21 * c / (ca+cb+cd+ce))
 
 #Variable key
-#y[0] = p53_active
-#y[1] = mdm2
-#y[2] = MDM2
-#y[3] = p21
+#y[0] = p14
+#y[1] = Ink4
+#y[2] = p21
+#y[3] = p53
 #y[4] = Rb
-#y[5] = Rb-E7
-#y[6] = E2F
-#y[7] = Me
-#y[8] = Ma
-#y[9] = Mb
-#y[10] = Cdc20
-#y[11] = p16
-#y[12] = Md
+#y[5] = RbMP
+#y[6] = RbPP
+#y[7] = E2F
+#y[8] = mdm2
+#y[9] = MDM2
+#y[10] = CD (Cyclin D/CDK4-6 complex)
+#y[11] = CE (Cyclin E/CDK2 complex)
+#y[12] = CA (Cyclin A/CDK2 complex)
+#y[13] = CB (Cyclin B/CDK1 complex)
+#y[14] = CDC20
 names = []
+names.append("p14")
+names.append("Ink4")
+names.append("p21")
 names.append("p53")
+names.append("Rb")
+names.append("RbMP")
+names.append("RbPP")
+names.append("E2F")
 names.append("mdm2")
 names.append("MDM2")
-names.append("p21")
-names.append("Rb")
-names.append("Rb-E7")
-names.append("E2F")
-names.append("Me")
-names.append("Ma")
-names.append("Mb")
-names.append("Cdc20")
-names.append("p16")
-names.append("Md")
+names.append("CD")
+names.append("CE")
+names.append("CA")
+names.append("CB")
+names.append("CDC20")
+
 
 
 
 #The derivative function for the differential equation system.
 def func(y,t):
     return [
-            #p53: synth - MDM2 degradation - E6 degradation - regular degradation
-            beta_vp - theta_mdm2 * alpha_mpa * y[2] * y[0] - alpha_epa * E6(t) * y[0] - alpha_p53 * y[0],
-            #mdm2: p53 transcription + Rb transcription - degradation
-            theta_p53 * beta_mm * y[0] + beta_mi * kappa_rb / (kappa_rb + theta_rb * y[4]) - alpha_m * y[1],
-            #MDM2: translation - degradation - MPF degradation
-            beta_m * y[1] - alpha_M * y[2] - theta_ma * alpha_mm * y[8] * y[2],
-            #p21: Um, lots of things.
-            beta_p21 + theta_p53*beta_pp*y[0]/(y[0]+kappa_p) - alpha_p21*y[3] - alpha_ep21*(E7(t) - y[5])*y[3],
-            #Rb: synth - degrad - cyclin - E7 association + E7 dissociation
-            beta_rb - alpha_rb*y[4] - theta_me*alpha_crb*y[7]*y[4] - kappa_a * y[4] * (E7(t) - y[5]) + kappa_d * y[5],
-            #Rb-E7: association - dissociation
-            kappa_a * y[4] * (E7(t) - y[5]) - kappa_d * y[5],
-            #Active E2F: activation - deactivation
-            v_1e2f * (e2ftot - y[6])/(k_1e2f + e2ftot - y[6]) * (theta_md*y[12] + theta_me*y[7]) - v_2e2f * y[6]/(k_2e2f + y[6]) * theta_ma * y[8],
-            #Cyclin E/CDK2 complex: synth - degrad (CycA/CDK2) - degrad (p21)
-            theta_e2f * v_se * (y[6]**2 / (y[6] + kappa_e2f * y[4])) - theta_ma * v_de * y[8] * y[7]/(k_de + y[7]) - theta_p21 * k_e * y[3] * y[7],
-            #Cyclin A/CDK2 complex: synth - degrad (Cdc20) - degrad (p21)
-            theta_e2f * v_sa * (y[6]**2 / (y[6] + kappa_e2f * y[4])) - theta_cdc20 * v_da * y[10] * y[8]/(k_da + y[8]) - theta_p21 * k_a * y[3] * y[8],
-            #Cyclin B/CDK1 complex: synth - degrad (Cdc20) - degrad (p21)
-            theta_ma * v_sb * y[8] - theta_cdc20 * v_db * y[10] * y[9]/(k_db + y[9]) - theta_p21 *  k_b * y[3] * y[9],
-            #Active Cdc20: activation - deactivation
-            theta_mb * v_1cdc20 * y[9] * (cdc20tot - y[10])/(k_1cdc20 + cdc20tot - y[10]) - v_2cdc20 * y[10]/(k_2cdc20 + y[10]),
-            #p16: Synthesis - degradation
-            theta_e2f * beta_p16 * (y[6]**2 / (y[6] + kappa_e2f * y[4])) - alpha_p16 * y[11],
-            #Md: Synthesis - degradation (normal) - degradation (p16)
-            v_sd * gf / (k_gf + gf) - v_dd * y[12] / (k_dd + y[12]) - theta_p16 * k_d * y[11] * y[12]
+            #We have p14 being produced by E2F after inhibition from Rb and p53
+            #is accounted for, and degraded at a constant rate.
+            alpha_p14 * f(y[7], y[4], y[5])**2 / (f(y[7], y[4], y[5]) + epsilon_p14p53 * y[3]) - omega_p14 * y[0],
+            #It's just like the p14 equation, but with Ink4 instead!
+            alpha_Ink4 * f(y[7], y[4], y[5])**2 / (f(y[7], y[4], y[5]) + epsilon_Ink4p53 * y[3]) - omega_Ink4 * y[1],
+            #Form p21 at a rate proportional to p53 presence; degrade it
+            #"naturally" or with help from Cyclin E/CDK2.
+            alpha_p21 * y[3] - omega_p21 * y[2] - omega_p21CE * y[2] * y[11],
+            #P53 is generated naturally at a constant rate, and degrades
+            #both on its own and with help from MDM2.
+            alpha_p53 - omega_p53 * y[3] - omega_p53MDM2 * y[3] * g(y[9], y[0]),
+            #Rb gets monophosphorylated by Cyclin D/CDK4-6.  Rb-monophosphate
+            #gets its phosphate cleaved at a constant rate.
+            -epsilon_RbCD * y[4] * y[10] + sigma_Rb * y[5],
+            #Rb-monophosphate can be formed by phosphorylation of Rb or cleavage
+            #of Rb-polyphosphate.  It can be lost by Cyclin E/CDK2 or
+            #phosphatase activity.
+            epsilon_RbCD * y[4] * y[10] - sigma_Rb * y[5] - epsilon_RbCE * y[5] * y[11] + sigma_RbMP * y[6],
+            #Rb-polyphosphate arises from Cyclin E/CDK2 activity on
+            #Rb-monophosphate, and is lost by phosphatase activity.
+            epsilon_RbCE * y[5] * y[11] - sigma_RbMP * y[6],
+            #E2F is inactivated by Cyclin A/CDK2.  It is reactivated at a
+            #constant rate, or so this equation proposes.
+            -epsilon_E2F * y[7] * y[12] + sigma_E2F * (E2F_tot - y[7]),
+            #mdm2 mRNA is promoted by p53 and degrades rapidly.
+            alpha_mdm2r * y[3] - omega_mdm2r * y[8],
+            #MDM2 protein is translated from mdm2 mRNA, and is degraded at a
+            #constant rate.
+            alpha_MDM2 * y[8] - omega_MDM2 * y[9],
+            #Cyclin D/CDK4-6 is promoted by E2F, and can degrade either on its
+            #own or under the influence of Ink4.
+            alpha_CD * f(y[7], y[4], y[5]) - omega_CD * y[10] - omega_CDInk4 * y[10] * y[1],
+            #Cyclin E/CDK2 is also promoted by E2F, and degrades on its own.
+            #When not inhibited by p21, it becomes Cyclin A/CDK2.
+            alpha_CE * f(y[7], y[4], y[5]) - omega_CE * y[11] - kappa_CECA * h(y[11], y[2], y[10], y[11], y[12], y[13]),
+            #Cyclin A/CDK2 forms from Cyclin E/CDK2.  It degrades over time, and
+            #degrades faster under the influence of active CDC20.
+            kappa_CECA * h(y[11], y[2], y[10], y[11], y[12], y[13]) - omega_CA * y[12] - omega_CACDC20 * y[12] * y[14],
+            #Cyclin B/CDK1 is constantly produced, but normally gets degraded
+            #quickly; active Cyclin A/CDK2 slows down the degradation.  Active
+            #CDC20 also degrades it, however.
+            alpha_CB - omega_CB * y[13] * 1/(kappa_CBCA + h(y[12], y[2], y[10], y[11], y[12], y[13])) - omega_CBCDC20 * y[13] * y[14],
+            #CDC20 is activated by Cyclin B/CDK1.  It is inactivated gradually
+            #over time.
+            sigma_CDC20 * y[13] * (CDC20_tot - y[14]) - epsilon_CDC20 * y[14],
            ]
 
 t = arange(0, 2000.0, 0.1)
