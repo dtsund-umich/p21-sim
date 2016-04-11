@@ -171,11 +171,11 @@ names.append("CDC20")
 #The derivative function for the differential equation system.
 def func(y,t):
     return [
-            #We have p14 being produced by E2F after inhibition from Rb and p53
+            #We have p14 being produced by E2F after inhibition from Rb
             #is accounted for, and degraded at a constant rate.
-            alpha_p14 * f(y[7], y[4], y[5])**2 / (f(y[7], y[4], y[5]) + epsilon_p14p53 * y[3]) - omega_p14 * y[0],
+            alpha_p14 * f(y[7], y[4], y[5]) - omega_p14 * y[0],
             #It's just like the p14 equation, but with Ink4 instead!
-            alpha_Ink4 * f(y[7], y[4], y[5])**2 / (f(y[7], y[4], y[5]) + epsilon_Ink4p53 * y[3]) - omega_Ink4 * y[1],
+            alpha_Ink4 * f(y[7], y[4], y[5]) - omega_Ink4 * y[1],
             #Form p21 at a rate proportional to p53 presence; degrade it
             #"naturally" or with help from Cyclin E/CDK2.
             alpha_p21 * y[3] - omega_p21 * y[2] - omega_p21CE * y[2] * y[11],
