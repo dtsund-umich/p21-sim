@@ -73,7 +73,7 @@ epsilon_p14p53 = 1 #DUMMY
 epsilon_Ink4p53 = 1 #DUMMY
 epsilon_RbCD = 1 #DUMMY
 epsilon_RbCE = 1 #DUMMY
-epsilon_E2F = 1 #DUMMY
+epsilon_E2F = 100 #DUMMY
 epsilon_CDC20 = 1 #DUMMY
 
 sigma_Rb = 1 #DUMMY
@@ -84,18 +84,20 @@ sigma_CDC20 = 1 #DUMMY
 kappa_CECA = 1 #DUMMY
 kappa_CBCA = 1 #DUMMY
 
-E2F_tot = 1 #DUMMY
-CDC20_tot = 1 #DUMMY
+E2F_tot = 50 #DUMMY
+CDC20_tot = 0.1 #DUMMY
 
-
-#Dummy initial conditions
-y0 = [0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]
+Rb_tot = 1 #DUMMY
 
 #Potentially override parameters
 for infile in infiles:
     reader = open(infile)
     for line in reader.readlines():
         exec(line)
+
+
+#Dummy initial conditions
+y0 = [0.1,0.1,0.1,0.1,Rb_tot,0.0,0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]
 
 
 #Abort early if the output directory already exists.
