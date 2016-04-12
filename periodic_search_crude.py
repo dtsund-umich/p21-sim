@@ -43,7 +43,7 @@ for d in directories:
             if max(data) > 0.00000001 and max(data)/min(data) > 1.2 and len(maxima) > 2:
                 if checking_one:
                     sys.exit(1)
-                print "Periodic/bad behavior found in trial " + d + ", file " + f + ", period = " + str((maxima[1] - maxima[0]) * 0.01)
+                print "Periodic behavior found in trial " + d + ", file " + f + ", period = " + str((maxima[1] - maxima[0]) * 0.01)
                 bad = True
                 break
         except IndexError:
@@ -54,5 +54,5 @@ for d in directories:
     if not bad:
         if checking_one:
             sys.exit(0)
-        print "Good behavior found in trial " + d
+        print "Steady-state behavior found in trial " + d
     os.chdir("..")
