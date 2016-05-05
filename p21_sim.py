@@ -197,10 +197,10 @@ def func(y,t):
             alpha_Ink4 * f(y[7], y[4], y[5]) - omega_Ink4 * y[1]/(y[1] + k_Ink4),
             #Form p21 at a rate proportional to p53 presence; degrade it
             #"naturally" or with help from Cyclin E/CDK2.
-            alpha_p21 * y[3] - y[2]/(y[2] + k_p21) * (omega_p21 - omega_p21CE * y[11]),
+            alpha_p21 * y[3] - y[2]/(y[2] + k_p21) * (omega_p21 + omega_p21CE * y[11]),
             #P53 is generated naturally at a constant rate, and degrades
             #both on its own and with help from MDM2.
-            alpha_p53 - y[3]/(y[3] + k_p53) * (omega_p53 - omega_p53MDM2 * g(y[9], y[0])),
+            alpha_p53 - y[3]/(y[3] + k_p53) * (omega_p53 + omega_p53MDM2 * g(y[9], y[0])),
             #Rb gets monophosphorylated by Cyclin D/CDK4-6.  Rb-monophosphate
             #gets its phosphate cleaved at a constant rate.
             -epsilon_RbCD * y[4]/(y[4]+k_RbCD) * y[10] + sigma_Rb * y[5]/(y[5]+k_RbMP),
@@ -221,17 +221,17 @@ def func(y,t):
             alpha_MDM2 * y[8] - omega_MDM2 * y[9]/(y[9] + k_MDM2),
             #Cyclin D/CDK4-6 is promoted by E2F, and can degrade either on its
             #own or under the influence of Ink4.
-            alpha_CD * f(y[7], y[4], y[5]) - y[10]/(y[10] + k_CD) * (omega_CD - omega_CDInk4 * y[1]),
+            alpha_CD * f(y[7], y[4], y[5]) - y[10]/(y[10] + k_CD) * (omega_CD + omega_CDInk4 * y[1]),
             #Cyclin E/CDK2 is also promoted by E2F, and degrades on its own.
             #When not inhibited by p21, it becomes Cyclin A/CDK2.
             alpha_CE * f(y[7], y[4], y[5]) - omega_CE * y[11]/(y[11] + k_CE) - kappa_CECA * h(y[11], y[2], y[10], y[11], y[12], y[13]),
             #Cyclin A/CDK2 forms from Cyclin E/CDK2.  It degrades over time, and
             #degrades faster under the influence of active CDC20.
-            kappa_CECA * h(y[11], y[2], y[10], y[11], y[12], y[13]) - y[12]/(y[12] + k_CA) * (omega_CA - omega_CACDC20 * y[14]),
+            kappa_CECA * h(y[11], y[2], y[10], y[11], y[12], y[13]) - y[12]/(y[12] + k_CA) * (omega_CA + omega_CACDC20 * y[14]),
             #Cyclin B/CDK1 is constantly produced, but normally gets degraded
             #quickly; active Cyclin A/CDK2 slows down the degradation.  Active
             #CDC20 also degrades it, however.
-            alpha_CB - y[13]/(y[13] + k_CB) * (omega_CB * 1/(kappa_CBCA + h(y[12], y[2], y[10], y[11], y[12], y[13])) - omega_CBCDC20 * y[14]),
+            alpha_CB - y[13]/(y[13] + k_CB) * (omega_CB * 1/(kappa_CBCA + h(y[12], y[2], y[10], y[11], y[12], y[13])) + omega_CBCDC20 * y[14]),
             #CDC20 is activated by Cyclin B/CDK1.  It is inactivated gradually
             #over time.
             sigma_CDC20 * y[13] * (CDC20_tot - y[14])/(k_CDC20CB + CDC20_tot - y[14]) - epsilon_CDC20 * y[14]/(k_CDC20 + y[14]),
