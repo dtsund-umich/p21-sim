@@ -224,10 +224,10 @@ def func(y,t):
             alpha_CD * f(y[7], y[4], y[5]) - y[10]/(y[10] + k_CD) * (omega_CD + omega_CDInk4 * y[1]),
             #Cyclin E/CDK2 is also promoted by E2F, and degrades on its own.
             #When not inhibited by p21, it becomes Cyclin A/CDK2.
-            alpha_CE * f(y[7], y[4], y[5]) - omega_CE * y[11]/(y[11] + k_CE) - kappa_CECA * h(y[11], y[2], y[10], y[11], y[12], y[13]),
+            alpha_CE * f(y[7], y[4], y[5]) - omega_CE * y[11]/(y[11] + k_CE) - kappa_CECA * h(y[11], y[2], y[10], y[11], y[12], y[13]) * y[12],
             #Cyclin A/CDK2 forms from Cyclin E/CDK2.  It degrades over time, and
             #degrades faster under the influence of active CDC20.
-            kappa_CECA * h(y[11], y[2], y[10], y[11], y[12], y[13]) - y[12]/(y[12] + k_CA) * (omega_CA + omega_CACDC20 * y[14]),
+            kappa_CECA * h(y[11], y[2], y[10], y[11], y[12], y[13]) * y[12] - y[12]/(y[12] + k_CA) * (omega_CA + omega_CACDC20 * y[14]),
             #Cyclin B/CDK1 is constantly produced, but normally gets degraded
             #quickly; active Cyclin A/CDK2 slows down the degradation.  Active
             #CDC20 also degrades it, however.
