@@ -139,17 +139,17 @@ sanity_threshold = 0.00001
 def f(e2f, rb, rbmp):
     if e2f < sanity_threshold:
         return 0
-    return e2f / (e2f + beta_E2FRb * rb + beta_E2FRbMP * rbmp)
+    return e2f**2 / (e2f + beta_E2FRb * rb + beta_E2FRbMP * rbmp)
 
 def g(mdm2, p14):
     if mdm2 < sanity_threshold:
         return 0
-    return mdm2 / (mdm2 + beta_mdm2p14 * p14)
+    return mdm2**2 / (mdm2 + beta_mdm2p14 * p14)
 
 def h(c, p21, cd, ce, ca, cb):
     if c < sanity_threshold:
         return 0
-    return c / (c + beta_cp21 * p21 * c / (ca+cb+cd+ce))
+    return c**2 / (c + beta_cp21 * p21 * c / (ca+cb+cd+ce))
 
 #Variable key
 #y[0] = p14
@@ -192,15 +192,15 @@ def func(y,t):
     return [
             #We have p14 being produced by E2F after inhibition from Rb
             #is accounted for, and degraded at a constant rate.
-            alpha_p14 * f(y[7], y[4], y[5]) - omega_p14 * y[0]/(y[0] + k_p14),
+            alpha_p14 * f(y[7], y[4], y[5]) - omega_p14 * y[0],
             #It's just like the p14 equation, but with Ink4 instead!
-            alpha_Ink4 * f(y[7], y[4], y[5]) - omega_Ink4 * y[1]/(y[1] + k_Ink4),
+            alpha_Ink4 * f(y[7], y[4], y[5]) - omega_Ink4 * y[1],
             #Form p21 at a rate proportional to p53 presence; degrade it
             #"naturally" or with help from Cyclin E/CDK2.
-            alpha_p21 * y[3] - y[2]/(y[2] + k_p21) * (omega_p21 + omega_p21CE * y[11]),
+            alpha_p21 * y[3] - omega_p21 * y[2] - omega_p21CE * y[11] * y[2]/(y[2]+k_p21),
             #P53 is generated naturally at a constant rate, and degrades
             #both on its own and with help from MDM2.
-            alpha_p53 - y[3]/(y[3] + k_p53) * (omega_p53 + omega_p53MDM2 * g(y[9], y[0])),
+            alpha_p53 - omega_p53 * y[3] - omega_p53MDM2 * g(y[9], y[0]) * y[3]/(y[3]+k_p53),
             #Rb gets monophosphorylated by Cyclin D/CDK4-6.  Rb-monophosphate
             #gets its phosphate cleaved at a constant rate.
             -epsilon_RbCD * y[4]/(y[4]+k_RbCD) * y[10] + sigma_Rb * y[5]/(y[5]+k_RbMP),
@@ -215,23 +215,23 @@ def func(y,t):
             #constant rate, or so this equation proposes.
             -epsilon_E2F * y[7] * y[12]/(y[7] + k_E2FCA) + sigma_E2F * (E2F_tot - y[7])/(k_E2F + E2F_tot - y[7]),
             #mdm2 mRNA is promoted by p53 and degrades rapidly.
-            alpha_mdm2r * y[3] - omega_mdm2r * y[8]/(y[8] + k_mdm2r),
+            alpha_mdm2r * y[3] - omega_mdm2r * y[8],
             #MDM2 protein is translated from mdm2 mRNA, and is degraded at a
             #constant rate.
-            alpha_MDM2 * y[8] - omega_MDM2 * y[9]/(y[9] + k_MDM2),
+            alpha_MDM2 * y[8] - omega_MDM2 * y[9],
             #Cyclin D/CDK4-6 is promoted by E2F, and can degrade either on its
             #own or under the influence of Ink4.
-            alpha_CD * f(y[7], y[4], y[5]) - y[10]/(y[10] + k_CD) * (omega_CD + omega_CDInk4 * y[1]),
+            alpha_CD * f(y[7], y[4], y[5]) - omega_CD * y[10] - y[10]/(y[10] + k_CD) * omega_CDInk4 * y[1],
             #Cyclin E/CDK2 is also promoted by E2F, and degrades on its own.
             #When not inhibited by p21, it becomes Cyclin A/CDK2.
-            alpha_CE * f(y[7], y[4], y[5]) - omega_CE * y[11]/(y[11] + k_CE) - kappa_CECA * h(y[11], y[2], y[10], y[11], y[12], y[13]) * y[12],
+            alpha_CE * f(y[7], y[4], y[5]) - omega_CE * y[11] - kappa_CECA * h(y[11], y[2], y[10], y[11], y[12], y[13]) * y[12],
             #Cyclin A/CDK2 forms from Cyclin E/CDK2.  It degrades over time, and
             #degrades faster under the influence of active CDC20.
-            kappa_CECA * h(y[11], y[2], y[10], y[11], y[12], y[13]) * y[12] - y[12]/(y[12] + k_CA) * (omega_CA + omega_CACDC20 * y[14]),
+            kappa_CECA * h(y[11], y[2], y[10], y[11], y[12], y[13]) * y[12] - omega_CA * y[12] - y[12]/(y[12] + k_CA) * omega_CACDC20 * y[14],
             #Cyclin B/CDK1 is constantly produced, but normally gets degraded
             #quickly; active Cyclin A/CDK2 slows down the degradation.  Active
             #CDC20 also degrades it, however.
-            alpha_CB - y[13]/(y[13] + k_CB) * (omega_CB * 1/(kappa_CBCA + h(y[12], y[2], y[10], y[11], y[12], y[13])) + omega_CBCDC20 * y[14]),
+            alpha_CB - omega_CB * y[13] /(kappa_CBCA + h(y[12], y[2], y[10], y[11], y[12], y[13])) - y[13]/(y[13] + k_CB) * omega_CBCDC20 * y[14],
             #CDC20 is activated by Cyclin B/CDK1.  It is inactivated gradually
             #over time.
             sigma_CDC20 * y[13] * (CDC20_tot - y[14])/(k_CDC20CB + CDC20_tot - y[14]) - epsilon_CDC20 * y[14]/(k_CDC20 + y[14]),
@@ -239,7 +239,7 @@ def func(y,t):
 
 t = arange(0, 2000.0, 0.1)
 
-y = odeint(func, y0, t, ixpr=False)
+y = odeint(func, y0, t, ixpr=False, mxstep=5000)
 
 if dirname == "":
     dirname = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d-%H:%M:%S')
