@@ -219,9 +219,9 @@ def func(y,t):
             #MDM2 protein is translated from mdm2 mRNA, and is degraded at a
             #constant rate.
             alpha_MDM2 * y[8] - omega_MDM2 * y[9],
-            #Cyclin D/CDK4-6 is promoted by E2F, and can degrade either on its
+            #Cyclin D/CDK4-6 is promoted by growth factor, and can degrade either on its
             #own or under the influence of Ink4.
-            alpha_CD * f(y[7], y[4], y[5]) - omega_CD * y[10] - y[10]/(y[10] + k_CD) * omega_CDInk4 * y[1],
+            alpha_CD - omega_CD * y[10] - y[10]/(y[10] + k_CD) * omega_CDInk4 * y[1],
             #Cyclin E/CDK2 is also promoted by E2F, and degrades on its own.
             #When not inhibited by p21, it becomes Cyclin A/CDK2.
             alpha_CE * f(y[7], y[4], y[5]) - omega_CE * y[11] - kappa_CECA * h(y[11], y[2], y[10], y[11], y[12], y[13]) * y[12],
