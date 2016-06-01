@@ -162,6 +162,8 @@ def g(mdm2, p14):
 def h(c, p21, cd, ce, ca, cb):
     if c < sanity_threshold:
         return 0
+    if ca+cb+cd+ce < sanity_threshold:
+        return 0
     return c**2 / (c + beta_cp21 * p21 * c / (ca+cb+cd+ce))
 
 #Variable key
