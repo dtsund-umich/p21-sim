@@ -29,3 +29,9 @@ for f in files:
         cur_process = cur_process % num_procs
         if cur_process == last_started:
             time.sleep(1)
+
+#Don't actually terminate *this* process until all subprocesses are done.
+#Important for some things that call this and depend on this having entirely
+#finished.
+for proc in proclist:
+    proc.wait()
