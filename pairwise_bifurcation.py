@@ -15,7 +15,7 @@ for i in xrange(len(parameter_list)-1):
         pairfile.close()
         
         #Generate the parameter space and solve the equations.
-        os.system("python square_search.py pair.txt " + str(size) + " pair -e")
+        os.system("python latin_hypercube.py pair.txt " + str(size) + " pair -e -s")
         os.system("python threaded_runner.py pair_list.txt 8")
         
         os.system("python figure.py " + str(size))
