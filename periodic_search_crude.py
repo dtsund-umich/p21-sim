@@ -11,7 +11,7 @@ def main(arg):
     threshold = 0.1
 
     #New feature: Pass in an argument to check only one directory!
-    #Return code 1 for periodicity, 0 otherwise.
+    #Return code is period (rounded down) for periodicity, 0 otherwise.
     #Newer feature: Pass the -periodic_only argument to only print the names
     #of periodic directories.
     checking_one = False
@@ -62,11 +62,11 @@ def main(arg):
                 if divergent:
                     one_diverges = True
                 if max(data) > 0.00000001 and max(data)/min(data) > 1.002 and len(maxima) > 2:
-                    if checking_one:
-                        return 1
                     periodicity = True
                     periodic_file = f
                     period = str((maxima[0] - maxima[1]) * stepsize)
+                    if checking_one:
+                        return int(float(period))
                     bad = True
                     break
             except IndexError:
