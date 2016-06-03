@@ -64,7 +64,7 @@ omega_CACDC20 = 1 #DUMMY
 omega_CB = 1 #DUMMY
 omega_CBCDC20 = 1 #DUMMY
 
-beta_E2FRb = 1 #DUMMY
+beta_E2FRb = 2 #DUMMY
 beta_E2FRbMP = beta_E2FRb * 0.3 #DUMMY, but should be smaller than beta_E2FRb
 beta_mdm2p14 = 1 #DUMMY
 beta_cp21 = 1 #DUMMY
@@ -73,7 +73,7 @@ epsilon_p14p53 = 1 #DUMMY
 epsilon_Ink4p53 = 1 #DUMMY
 epsilon_RbCD = 1 #DUMMY
 epsilon_RbCE = 1 #DUMMY
-epsilon_E2F = 100 #DUMMY
+epsilon_E2F = 10 #DUMMY
 epsilon_CDC20 = 1 #DUMMY
 
 sigma_Rb = 1 #DUMMY
@@ -116,10 +116,10 @@ k_CB = 1
 k_CDC20CB = 1
 k_CDC20 = 1
 
-E2F_tot = 50 #DUMMY
-CDC20_tot = 0.1 #DUMMY
+E2F_tot = 10 #DUMMY
+CDC20_tot = 5 #DUMMY
 
-Rb_tot = 1 #DUMMY
+Rb_tot = 10 #DUMMY
 
 #Potentially override parameters
 for infile in infiles:
