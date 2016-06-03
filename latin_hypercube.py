@@ -10,7 +10,7 @@ if len(sys.argv) < 3:
     print "points: how many points are wanted"
     print "-e: add this flag for an exponential distribution (don't use 0 as a bound here)"
     print "-s: add this flag to exhaustively search along the first two parameters"
-    print "    in the parameter file (points^2 files will be generated)
+    print "    in the parameter file (points^2 files will be generated)"
     sys.exit(1)
 
 infile = sys.argv[1]
