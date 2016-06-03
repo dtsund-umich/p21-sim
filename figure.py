@@ -20,12 +20,16 @@ for i in xrange(size**2):
         sys.stdout.write("3")
     elif period < 20:
         sys.stdout.write("4")
-    elif period < 26:
+    elif period < 24:
         sys.stdout.write("5")
-    elif period < 35:
+    elif period < 28:
         sys.stdout.write("6")
-    else:
+    elif period < 32:
         sys.stdout.write("7")
+    elif period < 36:
+        sys.stdout.write("8")
+    else:
+        sys.stdout.write("9")
     #sys.stdout.write(str(periodic_search_crude.main(str(i))))
     os.chdir("..")
 print ""
