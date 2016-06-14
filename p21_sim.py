@@ -172,11 +172,11 @@ def h(c, p21, cd, ce, ca, cb):
 #y[2] = p21
 #y[3] = p53
 #y[4] = Rb
-#y[5] = RbMP
-#y[6] = RbPP
+#y[5] = pRb-P
+#y[6] = pRb-PP
 #y[7] = E2F
 #y[8] = mdm2
-#y[9] = MDM2
+#y[9] = pMDM2
 #y[10] = CD (Cyclin D/CDK4-6 complex)
 #y[11] = CE (Cyclin E/CDK2 complex)
 #y[12] = CA (Cyclin A/CDK2 complex)
