@@ -70,8 +70,6 @@ beta_E2FRbMP = beta_E2FRb * 0.3 #DUMMY, but should be smaller than beta_E2FRb
 beta_mdm2p14 = 1 #DUMMY
 beta_cp21 = 1 #DUMMY
 
-epsilon_p14p53 = 1 #DUMMY
-epsilon_Ink4p53 = 1 #DUMMY
 epsilon_RbCD = 1 #DUMMY
 epsilon_RbCE = 1 #DUMMY
 epsilon_E2F = 10 #DUMMY
