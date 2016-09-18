@@ -54,6 +54,7 @@ omega_p21 = 1 #DUMMY
 omega_p21CE = 1 #DUMMY
 omega_p53 = 1 #DUMMY
 omega_p53MDM2 = 1 #DUMMY
+omega_p53E6 = 1 #DUMMY
 omega_mdm2r = 1 #DUMMY
 omega_MDM2 = 1 #DUMMY
 omega_CD = 1 #DUMMY
@@ -215,7 +216,7 @@ def func(y,t):
             alpha_p21 * theta_p53 * y[3] - omega_p21 * y[2] - omega_p21CE * theta_CE * y[11] * y[2]/(y[2]+k_p21),
             #P53 is generated naturally at a constant rate, and degrades
             #both on its own and with help from MDM2.
-            alpha_p53 - omega_p53 * y[3] - omega_p53MDM2 * theta_MDM2 * g(y[9], y[0]) * y[3]/(y[3]+k_p53),
+            alpha_p53 - omega_p53 * y[3] - (omega_p53MDM2 * theta_MDM2 * g(y[9], y[0]) + omega_p53E6 * E6(t)) * y[3]/(y[3]+k_p53),
             #Rb gets monophosphorylated by Cyclin D/CDK4-6.  Rb-monophosphate
             #gets its phosphate cleaved at a constant rate.
             -epsilon_RbCD * theta_CD * y[4]/(y[4]+k_RbCD) * y[10] + sigma_Rb * y[5]/(y[5]+k_RbMP),
