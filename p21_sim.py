@@ -96,8 +96,6 @@ theta_CB = 1
 theta_CDC20 = 1
 
 
-k_p14 = 1
-k_Ink4 = 1
 k_p21 = 1
 k_p53 = 1
 k_RbMP = 1
@@ -106,10 +104,7 @@ k_RbCD = 1
 k_RbCE = 1
 k_E2FCA = 1
 k_E2F = 1
-k_mdm2r = 1
-k_MDM2 = 1
 k_CD = 1
-k_CE = 1
 k_CA = 1
 k_CB = 1
 k_CDC20CB = 1
