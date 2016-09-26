@@ -69,6 +69,13 @@ beta_E2FRb = 2 #DUMMY
 beta_E2FRbMP = beta_E2FRb * 0.3 #DUMMY, but should be smaller than beta_E2FRb
 beta_mdm2p14 = 1 #DUMMY
 beta_cp21 = 1 #DUMMY
+beta_E7p21 = 1 #DUMMY
+beta_E7pRB = 1 #DUMMY
+beta_E7pRBP = 1 #DUMMY
+beta_E7pRBPP = 1 #DUMMY
+
+delta_E7p21 = 1 #DUMMY
+delta_E7pRB = 1 #DUMMY
 
 epsilon_RbCD = 0.4 #DUMMY
 epsilon_RbCE = 0.7 #DUMMY
@@ -122,7 +129,7 @@ for infile in infiles:
 
 
 #Dummy initial conditions
-y0 = [0.1,0.1,0.1,0.1,Rb_tot,0.0,0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1]
+y0 = [0.1,0.1,0.1,0.1,Rb_tot,0.0,0.0,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0,0]
 
 
 #Abort early if the output directory already exists.
@@ -159,6 +166,9 @@ def h(c, p21, cd, ce, ca, cb):
         return 0
     return c**2 / (c + beta_cp21 * p21 * c / (ca+cb+cd+ce))
 
+def j(e7, e7prb, e7p21):
+    return e7 - e7prb - e7p21
+
 #Variable key
 #y[0] = p14
 #y[1] = Ink4
@@ -175,6 +185,8 @@ def h(c, p21, cd, ce, ca, cb):
 #y[12] = CA (Cyclin A/CDK2 complex)
 #y[13] = CB (Cyclin B/CDK1 complex)
 #y[14] = CDC20
+#y[15] = E7-pRB
+#y[16] = E7-p21
 names = []
 names.append("p14")
 names.append("Ink4")
@@ -191,6 +203,8 @@ names.append("CE")
 names.append("CA")
 names.append("CB")
 names.append("CDC20")
+names.append("E7-pRB")
+names.append("E7-p21")
 
 
 
@@ -204,21 +218,23 @@ def func(y,t):
             #It's just like the p14 equation, but with Ink4 instead!
             alpha_Ink4 * theta_E2F * f(y[7], y[4], y[5]) - omega_Ink4 * y[1],
             #Form p21 at a rate proportional to p53 presence; degrade it
-            #"naturally" or with help from Cyclin E/CDK2.
-            alpha_p21 * theta_p53 * y[3] - omega_p21 * y[2] - omega_p21CE * theta_CE * y[11] * y[2]/(y[2]+k_p21),
+            #"naturally" or with help from Cyclin E/CDK2.    E7 sequesters p21.
+            alpha_p21 * theta_p53 * y[3] - omega_p21 * y[2] - omega_p21CE * theta_CE * y[11] * y[2]/(y[2]+k_p21) - beta_E7p21 * j(E7(t),y[15],y[16]) * y[2] + delta_E7p21 * y[16],
             #P53 is generated naturally at a constant rate, and degrades
             #both on its own and with help from MDM2.
             alpha_p53 - omega_p53 * y[3] - (omega_p53MDM2 * theta_MDM2 * g(y[9], y[0]) + omega_p53E6 * E6(t)) * y[3]/(y[3]+k_p53),
             #Rb gets monophosphorylated by Cyclin D/CDK4-6.  Rb-monophosphate
-            #gets its phosphate cleaved at a constant rate.
-            -epsilon_RbCD * theta_CD * y[4]/(y[4]+k_RbCD) * y[10] + sigma_Rb * y[5]/(y[5]+k_RbMP),
+            #gets its phosphate cleaved at a constant rate.  Rb of all sorts
+            #gets sequestered by E7.
+            -epsilon_RbCD * theta_CD * y[4]/(y[4]+k_RbCD) * y[10] + sigma_Rb * y[5]/(y[5]+k_RbMP) - beta_E7pRB * j(E7(t),y[15],y[16]) * y[4] + delta_E7pRB * y[15] * y[4]/Rb_tot,
             #Rb-monophosphate can be formed by phosphorylation of Rb or cleavage
             #of Rb-polyphosphate.  It can be lost by Cyclin E/CDK2 or
-            #phosphatase activity.
-            epsilon_RbCD * theta_CD * y[4]/(y[4]+k_RbCD) * y[10] - sigma_Rb * y[5]/(y[5]+k_RbMP) - epsilon_RbCE * theta_CE * y[5]/(y[5]+k_RbCE) * y[11] + sigma_RbMP * y[6]/(y[6]+k_RbPP),
+            #phosphatase activity.  Rb of all sorts gets sequestered by E7.
+            epsilon_RbCD * theta_CD * y[4]/(y[4]+k_RbCD) * y[10] - sigma_Rb * y[5]/(y[5]+k_RbMP) - epsilon_RbCE * theta_CE * y[5]/(y[5]+k_RbCE) * y[11] + sigma_RbMP * y[6]/(y[6]+k_RbPP) - beta_E7pRBP * j(E7(t),y[15],y[16]) * y[5] + delta_E7pRB * y[15] * y[5]/Rb_tot,
             #Rb-polyphosphate arises from Cyclin E/CDK2 activity on
-            #Rb-monophosphate, and is lost by phosphatase activity.
-            epsilon_RbCE * theta_CE * y[5]/(y[5]+k_RbCE) * y[11] - sigma_RbMP * y[6]/(y[6]+k_RbPP),
+            #Rb-monophosphate, and is lost by phosphatase activity.  Rb of all
+            #sorts gets sequestered by E7.
+            epsilon_RbCE * theta_CE * y[5]/(y[5]+k_RbCE) * y[11] - sigma_RbMP * y[6]/(y[6]+k_RbPP) - beta_E7pRBPP * j(E7(t),y[15],y[16]) * y[6] + delta_E7pRB * y[15] * y[6]/Rb_tot,
             #E2F is inactivated by Cyclin A/CDK2.  It is reactivated at a
             #constant rate, or so this equation proposes.
             -epsilon_E2F * theta_CA * y[7] * y[12]/(y[7] + k_E2FCA) + sigma_E2F * (E2F_tot - y[7])/(k_E2F + E2F_tot - y[7]),
@@ -243,6 +259,11 @@ def func(y,t):
             #CDC20 is activated by Cyclin B/CDK1.  It is inactivated gradually
             #over time.
             sigma_CDC20 * theta_CB * y[13] * (CDC20_tot - y[14])/(k_CDC20CB + CDC20_tot - y[14]) - epsilon_CDC20 * y[14]/(k_CDC20 + y[14]),
+            #E7 viral protein will associate with retinoblastoma protein,
+            #sequestering it into an inactive form.
+            beta_E7pRB * j(E7(t),y[15],y[16]) * y[4] + beta_E7pRBP * j(E7(t),y[15],y[16]) * y[5] + beta_E7pRBPP * j(E7(t),y[15],y[16]) * y[6] - delta_E7pRB * y[15],
+            #E7 viral protein will also associate with and sequester p21.
+            beta_E7p21 * j(E7(t),y[15],y[16]) * y[2] - delta_E7p21 * y[16],
            ]
 
 t = arange(0, 2000.0, 0.1)
