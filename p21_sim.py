@@ -41,23 +41,23 @@ if len(sys.argv) > 1:
 alpha_p14 = 1 #DUMMY
 alpha_Ink4 = 1 #DUMMY
 alpha_p21 = 1 #DUMMY
-alpha_p53 = 1 #DUMMY
-alpha_mdm2r = 1 #DUMMY
+alpha_p53 = 0.9 #DUMMY
+alpha_mdm2r = 9.425 #DUMMY
 alpha_MDM2 = 1 #DUMMY
 alpha_CD = 1 #DUMMY
 alpha_CE = 1 #DUMMY
 alpha_CB = 1 #DUMMY
 
-omega_p14 = 1 #DUMMY
-omega_Ink4 = 1 #DUMMY
+omega_p14 = 0.116 #DUMMY
+omega_Ink4 = 0.139 #DUMMY
 omega_p21 = 1 #DUMMY
 omega_p21CE = 1 #DUMMY
-omega_p53 = 1 #DUMMY
+omega_p53 = 2.079 #DUMMY
 omega_p53MDM2 = 1 #DUMMY
 omega_p53E6 = 1 #DUMMY
-omega_mdm2r = 1 #DUMMY
-omega_MDM2 = 1 #DUMMY
-omega_CD = 1 #DUMMY
+omega_mdm2r = 0.693 #DUMMY
+omega_MDM2 = 8.318 #DUMMY
+omega_CD = 0.023 #DUMMY
 omega_CDInk4 = 1 #DUMMY
 omega_CE = 1 #DUMMY
 omega_CA = 1 #DUMMY
@@ -70,13 +70,13 @@ beta_E2FRbMP = beta_E2FRb * 0.3 #DUMMY, but should be smaller than beta_E2FRb
 beta_mdm2p14 = 1 #DUMMY
 beta_cp21 = 1 #DUMMY
 
-epsilon_RbCD = 1 #DUMMY
-epsilon_RbCE = 1 #DUMMY
+epsilon_RbCD = 0.4 #DUMMY
+epsilon_RbCE = 0.7 #DUMMY
 epsilon_E2F = 10 #DUMMY
 epsilon_CDC20 = 1 #DUMMY
 
-sigma_Rb = 1 #DUMMY
-sigma_RbMP = 1 #DUMMY
+sigma_Rb = 0.3 #DUMMY
+sigma_RbMP = 0.1 #DUMMY
 sigma_E2F = 1 #DUMMY
 sigma_CDC20 = 1 #DUMMY
 
@@ -111,8 +111,7 @@ k_CDC20CB = 1
 k_CDC20 = 1
 
 E2F_tot = 10 #DUMMY
-CDC20_tot = 5 #DUMMY
-
+CDC20_tot = 0.285
 Rb_tot = 10 #DUMMY
 
 #Potentially override parameters
