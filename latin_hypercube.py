@@ -5,12 +5,14 @@ import sys
 import random
 
 if len(sys.argv) < 3:
-    print "use: python latin_hypercube.py parameters points outfile [-e] [-s]"
+    print "use: python latin_hypercube.py parameters points outfile [-e] [-s] [-nr]"
     print "parameters: file with parameter names, lower bounds, upper bounds"
     print "points: how many points are wanted"
     print "-e: add this flag for an exponential distribution (don't use 0 as a bound here)"
     print "-s: add this flag to exhaustively search along the first two parameters"
     print "    in the parameter file (points^2 files will be generated)"
+    print "-nr: add this flag to not shuffle the output; the first file will have the"
+    print "smallest values, and the last file will have the largest."
     sys.exit(1)
 
 infile = sys.argv[1]
@@ -20,10 +22,13 @@ outfile  = sys.argv[3]
 
 exponential = False
 square = False
+nonrandom = False
 if "-e" in sys.argv:
     exponential = True
 if "-s" in sys.argv:
     square = True
+if "-nr" in sys.argv:
+    nonrandom = True
 
 reader = open(infile)
 names = []
@@ -40,7 +45,7 @@ for line in reader.readlines():
         lower = float(words[1])
         upper = float(words[2])
     numlist = arange(lower, upper + (upper - lower)/numpoints, (upper - lower)/(numpoints-1))
-    if not square:
+    if not square and not nonrandom:
         random.shuffle(numlist)
     nums.append(numlist.tolist())
 
