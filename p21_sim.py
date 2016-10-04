@@ -39,8 +39,8 @@ if len(sys.argv) > 1:
 #Constants.  Do not add constants directly to the derivative function; violators
 #will have rabid weasels set upon them.
 alpha_p14 = 1 #DUMMY
-alpha_Ink4 = 1 #DUMMY
-alpha_p21 = 1 #DUMMY
+alpha_Ink4 = 5 #DUMMY
+alpha_p21 = 4 #DUMMY
 alpha_p53 = 0.9 #DUMMY
 alpha_mdm2r = 9.425 #DUMMY
 alpha_MDM2 = 1 #DUMMY
@@ -79,12 +79,12 @@ delta_E7pRB = 1 #DUMMY
 
 epsilon_RbCD = 0.4 #DUMMY
 epsilon_RbCE = 0.7 #DUMMY
-epsilon_E2F = 10 #DUMMY
+epsilon_E2F = 20 #DUMMY
 epsilon_CDC20 = 1 #DUMMY
 
 sigma_Rb = 0.3 #DUMMY
 sigma_RbMP = 0.1 #DUMMY
-sigma_E2F = 1 #DUMMY
+sigma_E2F = 0.7 #DUMMY
 sigma_CDC20 = 1 #DUMMY
 
 kappa_CECA = 1 #DUMMY
