@@ -61,7 +61,7 @@ def main(arg):
                             maxima.append(i)
                 if divergent:
                     one_diverges = True
-                if max(data) > 0.00000001 and max(data)/min(data) > 1.002 and len(maxima) > 2:
+                if max(data) > 0.00000001 and (min(data) <= 0 or max(data)/min(data) > 1.002) and len(maxima) > 2:
                     periodicity = True
                     periodic_file = f
                     period = str((maxima[0] - maxima[1]) * stepsize)
