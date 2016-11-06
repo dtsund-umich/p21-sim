@@ -11,6 +11,9 @@ files = open(sys.argv[1], 'r').readlines()
 num_procs = int(sys.argv[2])
 
 proclist = []
+#Will terminate any subprocess that runs for more than a minute.
+#Solver occasionally hangs.
+timelist = [0]*num_procs
 for i in xrange(num_procs):
     proclist.append(None)
 
@@ -19,12 +22,16 @@ last_started = 0
 
 for f in files:
     while True:
+        if timelist[cur_process] == 60:
+            proclist[cur_process].kill()
         if proclist[cur_process] == None or proclist[cur_process].poll() != None:
             proclist[cur_process] = subprocess.Popen("python p21_sim.py " + f, shell="True")
+            timelist[cur_process] = 0
             last_started = cur_process
             cur_process += 1
             cur_process = cur_process % num_procs
             break
+        timelist[cur_process] += 1
         cur_process += 1
         cur_process = cur_process % num_procs
         if cur_process == last_started:
