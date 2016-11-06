@@ -3,12 +3,17 @@ import subprocess
 import time
 
 if len(sys.argv) < 3:
-    print "Use: python threaded_runner file_list.txt cores"
+    print "Use: python threaded_runner file_list.txt cores [extra.txt]"
     print "file_list.txt: The list of parameter files to be used in p21_sim"
     print "cores: The number of cores to be used at once."
+    print "extra.txt: An additional parameter file to be used in every run."
 
 files = open(sys.argv[1], 'r').readlines()
 num_procs = int(sys.argv[2])
+
+extra = ""
+if len(sys.argv) >= 4:
+    extra = sys.argv[3]
 
 proclist = []
 #Will terminate any subprocess that runs for more than a minute.
@@ -25,7 +30,7 @@ for f in files:
         if timelist[cur_process] == 60:
             proclist[cur_process].kill()
         if proclist[cur_process] == None or proclist[cur_process].poll() != None:
-            proclist[cur_process] = subprocess.Popen("python p21_sim.py " + f, shell="True")
+            proclist[cur_process] = subprocess.Popen("python p21_sim.py " + f + " " + extra, shell="True")
             timelist[cur_process] = 0
             last_started = cur_process
             cur_process += 1
